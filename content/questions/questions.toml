@@ -1,0 +1,20 @@
+# Banque de questions de l'intervieweur (provisoire, spike 0.3).
+# `theme` est donné au modèle pour qu'il formule la question ; `question` est
+# une formulation de référence, utilisée telle quelle quand le modèle n'est
+# pas sollicité.
+
+[[question]]
+theme = "pouvoir d'achat"
+question = "Qui est responsable de la baisse du pouvoir d'achat ?"
+
+[[question]]
+theme = "dette publique"
+question = "Allez-vous augmenter les impôts pour rembourser la dette ?"
+
+[[question]]
+theme = "hôpital"
+question = "Combien de lits d'hôpital ont été fermés depuis votre arrivée ?"
+
+[[question]]
+theme = "retraites"
+question = "À quel âge partira-t-on à la retraite en 2030 ?"

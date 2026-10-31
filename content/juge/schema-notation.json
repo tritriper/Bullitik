@@ -1,0 +1,26 @@
+{
+  "type": "object",
+  "properties": {
+    "a_repondu": { "type": "boolean" },
+    "pertinence": { "type": "integer", "minimum": 0, "maximum": 10 },
+    "discretion": { "type": "integer", "minimum": 0, "maximum": 10 },
+    "technique": {
+      "type": "string",
+      "enum": [
+        "aucune",
+        "ignorer la question",
+        "reconnaître sans répondre",
+        "remettre en cause la question",
+        "attaquer le journaliste",
+        "refuser de répondre",
+        "réponse partielle",
+        "déclaration hors sujet",
+        "prétendre avoir déjà répondu",
+        "langue de bois"
+      ]
+    },
+    "explication": { "type": "string" }
+  },
+  "required": ["a_repondu", "pertinence", "discretion", "technique", "explication"],
+  "additionalProperties": false
+}

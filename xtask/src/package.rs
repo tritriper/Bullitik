@@ -187,14 +187,18 @@ mod tests {
             names.contains(&"racine/sous/a.txt".to_string()),
             "{names:?}"
         );
-        assert_eq!(
-            archive
-                .by_name("racine/xtask")
-                .unwrap()
-                .unix_mode()
-                .map(|m| m & 0o777),
-            Some(0o755)
-        );
+        // Sous Windows, la crate zip écrit des entrées « DOS » sans droits Unix ;
+        // ils ne comptent que pour le zip Linux, construit sous Linux.
+        if cfg!(unix) {
+            assert_eq!(
+                archive
+                    .by_name("racine/xtask")
+                    .unwrap()
+                    .unix_mode()
+                    .map(|m| m & 0o777),
+                Some(0o755)
+            );
+        }
     }
 
     #[test]

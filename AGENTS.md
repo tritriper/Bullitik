@@ -45,6 +45,18 @@ Si ces documents deviennent inaccessibles, en tenir une copie à jour dans
 - **Contenus séparés du code.** Prompts, fiche du juge et questions vivent dans
   `content/`, modifiables sans toucher au code.
 
+## Environnement
+
+- Tout se développe dans le devcontainer ([`docs/dev/setup.md`](docs/dev/setup.md)).
+  Toolchain, image, paquets apt : tout est épinglé ; une montée de version se
+  fait dans le fichier indiqué par `setup.md`, jamais à la main dans le conteneur.
+- **Tout ce qui se télécharge** (modèle, binaire tiers) est déclaré dans
+  `models/manifest.toml` avec son URL figée, sa taille, son SHA-256 et sa
+  licence, puis récupéré par `cargo xtask fetch`. Jamais de téléchargement
+  ad hoc dans un script ou dans le code.
+- Les mesures de performance (latence, VRAM) se font sur Windows natif, avec
+  les exécutables produits par la CI, jamais dans le conteneur.
+
 ## Git flow
 
 Le détail est dans [`docs/dev/contributing.md`](docs/dev/contributing.md).

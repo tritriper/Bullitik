@@ -1,0 +1,5 @@
+# Le contexte de build du devcontainer est la racine du dépôt : n'y envoyer
+# que ce que le Dockerfile copie.
+*
+!.devcontainer/asound.conf
+!rust-toolchain.toml

@@ -1,0 +1,36 @@
+// Devcontainer pour Windows + WSL2 (Docker Desktop, intégration WSL activée).
+// Même image que le devcontainer générique, plus le son et l'affichage de WSLg :
+// le micro et les haut-parleurs de Windows sont visibles dans le conteneur.
+// Le dépôt doit être cloné dans le système de fichiers WSL (pas sous /mnt/c).
+// Voir docs/dev/setup.md.
+{
+  "name": "Bullitik (Windows + WSL2)",
+  "build": {
+    "dockerfile": "../Dockerfile",
+    "context": "../.."
+  },
+  "remoteUser": "ubuntu",
+  "mounts": [
+    "source=bullitik-models,target=${containerWorkspaceFolder}/models/files,type=volume",
+    "source=bullitik-cargo-registry,target=/home/ubuntu/.cargo/registry,type=volume",
+    // Son (PulseAudio) et affichage (Wayland, X11) de WSLg.
+    "source=/mnt/wslg,target=/mnt/wslg,type=bind",
+    "source=/mnt/wslg/.X11-unix,target=/tmp/.X11-unix,type=bind"
+  ],
+  "containerEnv": {
+    "PULSE_SERVER": "unix:/mnt/wslg/PulseServer",
+    "WAYLAND_DISPLAY": "wayland-0",
+    "XDG_RUNTIME_DIR": "/mnt/wslg/runtime-dir",
+    "DISPLAY": ":0"
+  },
+  "postCreateCommand": "sudo chown ubuntu: models/files /home/ubuntu/.cargo/registry && cargo xtask fetch",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "rust-lang.rust-analyzer",
+        "tamasfe.even-better-toml",
+        "vadimcn.vscode-lldb"
+      ]
+    }
+  }
+}

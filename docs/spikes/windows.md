@@ -65,6 +65,8 @@ Chaque spike affiche la carte graphique utilisée, ses mesures, puis un résumé
   avec `--cpu` : le chargeur Vulkan vient du pilote de la carte graphique ;
   installer ou réparer le pilote AMD ou NVIDIA (ou, sur une machine sans GPU,
   le *Vulkan Runtime* de LunarG).
+- **Toute autre erreur** : relancer avec `$env:BULLITIK_LOG = "1"` avant la
+  commande ; whisper.cpp affiche alors son journal détaillé.
 - **« GPU Vulkan : aucun »** : mettre à jour le pilote de la carte graphique
   (AMD Adrenalin ou NVIDIA Game Ready).
 - **Pas de micro** : vérifier le micro par défaut dans *Paramètres → Système →

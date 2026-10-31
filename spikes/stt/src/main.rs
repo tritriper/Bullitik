@@ -40,7 +40,10 @@ struct Args {
 
 fn main() -> Result<()> {
     let args = Args::parse();
-    whisper_rs::install_logging_hooks();
+    // Journaux de whisper.cpp coupés, sauf avec BULLITIK_LOG=1 (diagnostic).
+    if std::env::var_os("BULLITIK_LOG").is_none() {
+        whisper_rs::install_logging_hooks();
+    }
 
     println!("== Spike 0.1 — reconnaissance vocale ==");
     let gpus = list_gpus();

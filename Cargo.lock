@@ -1823,6 +1823,7 @@ dependencies = [
  "bullitik-audio",
  "clap",
  "whisper-rs",
+ "whisper-rs-sys",
 ]
 
 [[package]]

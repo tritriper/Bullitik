@@ -11,6 +11,8 @@ anyhow = "1"
 bullitik-audio = { path = "../../crates/audio" }
 clap = { version = "4", features = ["derive"] }
 whisper-rs = { version = "0.16", features = ["vulkan"] }
+# Même version que celle de whisper-rs : registre de backends de ggml.
+whisper-rs-sys = "0.15"
 
 [lints]
 workspace = true

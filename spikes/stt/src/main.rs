@@ -43,7 +43,7 @@ fn main() -> Result<()> {
     whisper_rs::install_logging_hooks();
 
     println!("== Spike 0.1 — reconnaissance vocale ==");
-    let gpus = gpus();
+    let gpus = list_gpus();
     if gpus.is_empty() {
         println!("GPU Vulkan  : aucun");
     }
@@ -91,7 +91,7 @@ fn main() -> Result<()> {
         ms(t.elapsed())
     );
     if let (true, Some(before)) = (use_gpu, free_before) {
-        let after = gpus()[0].free;
+        let after = list_gpus()[0].free;
         println!(
             "VRAM prise  : ~{} (mémoire libre avant/après chargement)",
             mib(before.saturating_sub(after))
@@ -161,7 +161,7 @@ struct Gpu {
 /// rattrape les erreurs d'initialisation de Vulkan (machine sans pilote) et
 /// renvoie alors une liste vide. `whisper_rs::vulkan::list_devices`, lui,
 /// laisse passer une exception C++ qui fait avorter le programme.
-fn gpus() -> Vec<Gpu> {
+fn list_gpus() -> Vec<Gpu> {
     use whisper_rs_sys as sys;
     let mut gpus = Vec::new();
     // SAFETY : API C de ggml ; les périphériques viennent du registre et vivent

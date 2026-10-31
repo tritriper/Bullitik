@@ -26,10 +26,6 @@ permissions:
 
 env:
   CARGO_TERM_COLOR: always
-  # SDK Vulkan de LunarG pour compiler whisper.cpp sous Windows : version et
-  # SHA-256 de l'installeur (https://vulkan.lunarg.com/sdk/files.json).
-  VULKAN_SDK_VERSION: 1.4.363.0
-  VULKAN_SDK_SHA256: 94a82d378f7a5e3e54c9db7d2fb7016af136e14ac0a18dbf0f2f67a36352d141
 
 jobs:
   linux:
@@ -83,6 +79,8 @@ jobs:
               cargo xtask changelog check
               cargo xtask fetch --set ci
               cargo test --release --locked -- --ignored
+              cargo build --release --locked --workspace --bins
+              cargo xtask package --out /tmp/dist
             '
 
   windows:
@@ -96,28 +94,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - name: Cache du SDK Vulkan
-        id: vulkan-sdk
-        uses: actions/cache@v6
-        with:
-          path: C:\VulkanSDK\${{ env.VULKAN_SDK_VERSION }}
-          key: vulkan-sdk-${{ env.VULKAN_SDK_VERSION }}
-
-      - name: Installation du SDK Vulkan
-        if: steps.vulkan-sdk.outputs.cache-hit != 'true'
-        shell: pwsh
-        run: |
-          $exe = "$env:RUNNER_TEMP\vulkansdk.exe"
-          Invoke-WebRequest "https://sdk.lunarg.com/sdk/download/$env:VULKAN_SDK_VERSION/windows/vulkansdk-windows-X64-$env:VULKAN_SDK_VERSION.exe" -OutFile $exe
-          $sha = (Get-FileHash $exe -Algorithm SHA256).Hash.ToLower()
-          if ($sha -ne $env:VULKAN_SDK_SHA256) { throw "SHA-256 du SDK Vulkan inattendu : $sha" }
-          Start-Process $exe -Wait -ArgumentList "--root", "C:\VulkanSDK\$env:VULKAN_SDK_VERSION", "--accept-licenses", "--default-answer", "--confirm-command", "install"
-
-      - name: Variables du SDK Vulkan
-        shell: pwsh
-        run: |
-          "VULKAN_SDK=C:\VulkanSDK\$env:VULKAN_SDK_VERSION" >> $env:GITHUB_ENV
-          "C:\VulkanSDK\$env:VULKAN_SDK_VERSION\Bin" >> $env:GITHUB_PATH
+      - uses: ./.github/actions/sdk-vulkan-windows
 
       - uses: Swatinem/rust-cache@v2
         with:
@@ -133,25 +110,7 @@ jobs:
         run: cargo build --release --locked --workspace --bins
 
       - name: Dossier des spikes pour Windows
-        shell: pwsh
-        run: |
-          $d = "bullitik-spikes-windows"
-          New-Item -ItemType Directory -Force "$d\models" | Out-Null
-          Copy-Item "$env:CARGO_TARGET_DIR\release\spike-*.exe", "$env:CARGO_TARGET_DIR\release\xtask.exe" $d
-          Copy-Item models\manifest.toml "$d\models"
-          Copy-Item docs\spikes\windows.md "$d\LISEZMOI.md"
-          # Données de phonétisation d'espeak-ng (Piper), générées au build.
-          $espeak = Get-ChildItem "$env:CARGO_TARGET_DIR\release\build" -Directory -Filter "espeak-rs-sys-*" |
-            ForEach-Object { Join-Path $_.FullName "out\share\espeak-ng-data" } |
-            Where-Object { Test-Path $_ } |
-            Sort-Object { (Get-Item $_).LastWriteTime } |
-            Select-Object -Last 1
-          if (-not $espeak) { throw "espeak-ng-data introuvable dans $env:CARGO_TARGET_DIR\release\build" }
-          Copy-Item -Recurse $espeak "$d\espeak-ng-data"
-          if (Test-Path content) { Copy-Item -Recurse content $d }
-          New-Item -ItemType Directory -Force "$d\testdata" | Out-Null
-          Copy-Item spikes\stt\testdata\phrase.wav "$d\testdata"
-          Copy-Item scripts\mesurer-spikes.ps1 "$d\mesurer.ps1"
+        run: cargo xtask package --out .
 
       - name: Syntaxe du script de mesure
         shell: pwsh

@@ -10,6 +10,8 @@ ci-dessous y renvoient.
 ## [Non publié]
 
 ### Ajouté
+- Voix de l'intervieweur retenues (#7) : upmc-jessica et upmc-pierre, au choix du joueur.
+- Mesures des spikes 0.1 à 0.4 sur un PC Windows avec une Radeon RX 7800 XT : latence de dialogue 3,0 s, dont 2,0 s de transcription ; question 0,8 s, juge 2,4 s, 6,7 Go de VRAM ; rapports dans `docs/spikes/`.
 - État de l'art sur l'art de répondre sans répondre (#10) : Bull, Bavelas, Rogers et Norton, Clayman, corpus et LLM juges récents (CLARITY, EvasionBench), langue de bois ; typologie proposée de 11 techniques avec règles de départage et critères de discrétion, dans `docs/recherche/etat-de-l-art.md`.
 - Spike 0.4, chaîne complète (#9) : `spike-chaine` enchaîne question de l'intervieweur (LLM), voix (Piper), réponse au micro ou depuis un WAV, transcription (Whisper), relance parlée, puis notation du juge, et mesure la latence de dialogue (fin de la réponse → voix de l'intervieweur) ; rapport dans `docs/spikes/0.4-chaine.md`.
 - Crates `bullitik-voice` (reconnaissance et synthèse vocales) et `bullitik-llm` (llama-server, chat, contenus) : le code des spikes, réutilisable par le jeu ; les spikes 0.1 à 0.3 s'appuient dessus.
@@ -20,6 +22,8 @@ ci-dessous y renvoient.
 - Organisation du dépôt (#2) : git flow `main` / `dev` / branches de travail, backlog numéroté, CHANGELOG, modèles de pull request et d'item de backlog, règles des agents, licence GPL-3.0-or-later.
 
 ### Corrigé
+- spike-chaine : la VRAM mesurée avant/après chargement est donnée pour Whisper seul ; celle de llama-server, autre processus, était comptée à tort dedans.
+- mesurer.ps1 : nom du processeur lu dans le registre (WMI revenait vide) ; plus de lignes « System.Management.Automation.RemoteException » dans le rapport.
 - spike-llm : les requêtes vers llama-server (127.0.0.1) ne passent plus par un proxy défini dans l'environnement ; sinon le spike attendait 10 min puis échouait.
 - spike-llm : llama-server est tué avec le spike même en cas d'arrêt brutal (Job Object sous Windows, PR_SET_PDEATHSIG sous Linux), au lieu de garder des Go de VRAM.
 - spike-llm : un JSON invalide ou tronqué du juge est compté (« JSON valide n/4 ») au lieu d'arrêter le spike ; explication bornée à 400 caractères, `finish_reason` lu.

@@ -69,7 +69,10 @@ pub struct Transcriber {
 impl Transcriber {
     /// Charge le modèle, sur le GPU si `use_gpu` et qu'il y en a un.
     pub fn load(model: &Path, use_gpu: bool, threads: Option<usize>) -> Result<Self> {
-        whisper_rs::install_logging_hooks();
+        // Journaux de whisper.cpp coupés, sauf avec BULLITIK_LOG=1 (diagnostic).
+        if std::env::var_os("BULLITIK_LOG").is_none() {
+            whisper_rs::install_logging_hooks();
+        }
         let params = WhisperContextParameters {
             use_gpu,
             ..Default::default()

@@ -9,18 +9,18 @@ l'[archive](backlog-archive.md) avec son numéro, et dans le
 **États** : 🧭 décision à prendre · ✅ prêt · 🚧 en cours · ⏳ en attente d'un
 autre item · 🧪 construit, reste à lancer.
 
-**Au 31 octobre 2026** : 2 décisions · 3 en cours · 3 à lancer · 2 prêts · 7 en attente.
+**Au 31 octobre 2026** : 3 décisions · 5 à lancer · 2 prêts · 7 en attente.
 
 ## Lot 0 — Spikes de faisabilité
 
 | ID | Item | État | Fait quand |
 | --- | --- | --- | --- |
 | #2 | Organisation du dépôt : git flow, backlog, CHANGELOG, modèles de PR et d'issue, licence | 🧭 décision | Fusionné dans `dev` (PR #1). Reste : protéger `main` et `dev` (réglage GitHub, voir `contributing.md`). |
-| #5 | CD : livrable portable Windows et Linux à chaque tag `v*` | 🚧 en cours (PR #7) : reste un premier tag pour l'essayer | Un tag produit une release GitHub avec le zip et le texte du CHANGELOG. |
+| #5 | CD : livrable portable Windows et Linux à chaque tag `v*` | 🧪 à lancer : fusionné dans `dev` (PR #7), reste un premier tag pour l'essayer | Un tag produit une release GitHub avec le zip et le texte du CHANGELOG. |
 | #6 | Spike 0.1 — reconnaissance vocale seule, latence mesurée | 🧪 à lancer : fusionné dans `dev`, reste la mesure sur PC AMD et NVIDIA (`mesurer.ps1`) | Je parle, le texte s'affiche ; rapport de latence dans `docs/spikes/`. |
 | #7 | Spike 0.2 — synthèse vocale seule, latence mesurée, choix de la voix | 🧪 à lancer : fusionné dans `dev`, reste la mesure sur PC AMD et NVIDIA (`mesurer.ps1`) | Un texte est lu à voix haute ; rapport de latence et voix retenue. |
 | #8 | Spike 0.3 — modèle seul : intervieweur et juge en JSON, temps et VRAM mesurés | 🧪 à lancer : fusionné dans `dev`, reste la mesure sur PC AMD et NVIDIA (`mesurer.ps1`) | Les deux rôles répondent ; rapport de temps de réponse et de mémoire GPU. |
-| #9 | Spike 0.4 — chaîne complète voix → texte → modèle → voix (optionnel) | 🚧 en cours (PR #9) : reste la mesure sur PC | Une question complète passe de bout en bout ; latence totale mesurée. |
+| #9 | Spike 0.4 — chaîne complète voix → texte → modèle → voix (optionnel) | 🧪 à lancer : fusionné dans `dev` (PR #9), reste la mesure sur PC AMD et NVIDIA (`mesurer.ps1`) | Une question complète passe de bout en bout ; latence totale mesurée. |
 | #19 | CI : épingler les actions GitHub par SHA de commit, mises à jour par Dependabot | ✅ prêt | Aucune action référencée par un tag modifiable ; Dependabot ouvre les PR de montée de version. |
 | #20 | Robustesse des outils : verrou contre deux `xtask fetch` simultanés ; spike-llm vérifie que le serveur qui répond est bien le sien (`/props`) | ✅ prêt | Deux `fetch` en parallèle ne corrompent rien ; un port volé est détecté. |
 | #18 | GPU dans le devcontainer : Vulkan via la couche Mesa « dozen » de WSL2 | ⏳ après le lot 0, si besoin | Un spike lancé dans le conteneur utilise la carte AMD ou NVIDIA de l'hôte. |
@@ -29,7 +29,7 @@ autre item · 🧪 construit, reste à lancer.
 
 | ID | Item | État | Fait quand |
 | --- | --- | --- | --- |
-| #10 | État de l'art : Bull, Bavelas, Rogers et Norton, évasion en interview politique | 🚧 en cours (PR #10) : reste la validation de la typologie proposée | Synthèse sourcée dans `docs/recherche/etat-de-l-art.md`. |
+| #10 | État de l'art : Bull, Bavelas, Rogers et Norton, évasion en interview politique | 🧭 décision : fusionné dans `dev` (PR #10), reste à valider la typologie proposée | Synthèse sourcée dans `docs/recherche/etat-de-l-art.md`. |
 | #11 | Typologie des techniques d'esquive retenue, avec définition et exemple | ⏳ #10 | Fiche dans `content/juge/`. |
 | #12 | Règles du juge : prompt système, critères, schéma JSON de sortie | ⏳ #11 | Prompt et schéma dans `content/`, validés par un test. |
 | #13 | Jeu d'exemples annotés pour calibrer le juge | ⏳ #12 | Le juge retrouve la note attendue sur la majorité des exemples. |

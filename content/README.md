@@ -15,4 +15,7 @@ questions. Le code lit ces fichiers tels quels.
 **Statut** : version provisoire du spike 0.3, pour vérifier que le modèle tient
 les deux rôles. Le lot 1 (#10 à #14) les réécrit à partir de l'état de l'art.
 
-Dans les prompts, `{{nom}}` est remplacé par le code avant l'envoi au modèle.
+Dans le prompt du juge, `{{fiche}}` est remplacé par la fiche des techniques
+avant l'envoi au modèle ; aucune autre variable n'est reconnue. La relance de
+l'intervieweur utilise le premier exemple annoté comme esquive
+(`a_repondu = false`).

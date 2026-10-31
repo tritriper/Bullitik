@@ -12,9 +12,10 @@
 //!   cargo run --release -p spike-llm -- --model models/files/Ministral-3-14B-Instruct-2512-Q4_K_M.gguf
 
 mod content;
+mod orphan;
 mod server;
 
-use anyhow::{Context, Result};
+use anyhow::Result;
 use clap::Parser;
 use content::{Content, Notation};
 use serde_json::json;
@@ -90,7 +91,7 @@ fn main() -> Result<()> {
         calls.push(("intervieweur", c));
     }
     // Mistral exige l'alternance utilisateur / assistant après le prompt système.
-    let evasive = &content.examples[1];
+    let evasive = content.evasive_example();
     let messages = [
         json!({"role": "system", "content": content.interviewer}),
         json!({"role": "user", "content": "Thème : pouvoir d'achat. Pose ta question."}),
@@ -108,14 +109,28 @@ fn main() -> Result<()> {
         "json_schema": {"name": "notation", "strict": true, "schema": content.schema},
     });
     let mut agreements = 0;
+    let mut valid_json = 0;
     for ex in &content.examples {
         let messages = [
             json!({"role": "system", "content": content.judge}),
             json!({"role": "user", "content": format!("Question : {}\nRéponse du joueur : {}", ex.question, ex.reponse)}),
         ];
-        let c = server.chat(&messages, 0.1, 300, Some(&format))?;
-        let notation: Notation = serde_json::from_str(&c.text)
-            .with_context(|| format!("JSON du juge illisible : {}", c.text))?;
+        let c = server.chat(&messages, 0.1, 600, Some(&format))?;
+        // Un JSON invalide (réponse tronquée par max_tokens…) est compté, pas fatal :
+        // les mesures déjà prises ne sont pas perdues.
+        let notation: Notation = match serde_json::from_str(&c.text) {
+            Ok(n) => n,
+            Err(e) => {
+                println!(
+                    "[{}] JSON INVALIDE ({e}, fin : {}) : {}",
+                    ex.nom, c.finish_reason, c.text
+                );
+                report(&c);
+                calls.push(("juge", c));
+                continue;
+            }
+        };
+        valid_json += 1;
         let ok = ex.attendu.matches(&notation);
         agreements += usize::from(ok);
         println!(
@@ -157,7 +172,7 @@ fn main() -> Result<()> {
         );
     }
     println!(
-        "Juge        : JSON valide {n}/{n}, conforme aux annotations {agreements}/{n}",
+        "Juge        : JSON valide {valid_json}/{n}, conforme aux annotations {agreements}/{n}",
         n = content.examples.len()
     );
     print_memory(&server)?;

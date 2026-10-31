@@ -9,7 +9,7 @@ l'[archive](backlog-archive.md) avec son numéro, et dans le
 **États** : 🧭 décision à prendre · ✅ prêt · 🚧 en cours · ⏳ en attente d'un
 autre item · 🧪 construit, reste à lancer.
 
-**Au 31 octobre 2026** : 2 décisions · 1 en cours · 3 à lancer · 1 prêt · 8 en attente.
+**Au 31 octobre 2026** : 2 décisions · 1 en cours · 3 à lancer · 3 prêts · 8 en attente.
 
 ## Lot 0 — Spikes de faisabilité
 
@@ -21,6 +21,8 @@ autre item · 🧪 construit, reste à lancer.
 | #7 | Spike 0.2 — synthèse vocale seule, latence mesurée, choix de la voix | 🧪 à lancer : fusionné dans `dev`, reste la mesure sur PC AMD et NVIDIA (`mesurer.ps1`) | Un texte est lu à voix haute ; rapport de latence et voix retenue. |
 | #8 | Spike 0.3 — modèle seul : intervieweur et juge en JSON, temps et VRAM mesurés | 🧪 à lancer : fusionné dans `dev`, reste la mesure sur PC AMD et NVIDIA (`mesurer.ps1`) | Les deux rôles répondent ; rapport de temps de réponse et de mémoire GPU. |
 | #9 | Spike 0.4 — chaîne complète voix → texte → modèle → voix (optionnel) | ✅ prêt | Une question complète passe de bout en bout ; latence totale mesurée. |
+| #19 | CI : épingler les actions GitHub par SHA de commit, mises à jour par Dependabot | ✅ prêt | Aucune action référencée par un tag modifiable ; Dependabot ouvre les PR de montée de version. |
+| #20 | Robustesse des outils : verrou contre deux `xtask fetch` simultanés ; spike-llm vérifie que le serveur qui répond est bien le sien (`/props`) | ✅ prêt | Deux `fetch` en parallèle ne corrompent rien ; un port volé est détecté. |
 | #18 | GPU dans le devcontainer : Vulkan via la couche Mesa « dozen » de WSL2 | ⏳ après le lot 0, si besoin | Un spike lancé dans le conteneur utilise la carte AMD ou NVIDIA de l'hôte. |
 
 ## Lot 1 — Recherche et fiche du juge

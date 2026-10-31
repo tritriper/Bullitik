@@ -30,7 +30,9 @@ runs:
         Invoke-WebRequest "https://sdk.lunarg.com/sdk/download/$env:VERSION/windows/vulkansdk-windows-X64-$env:VERSION.exe" -OutFile $exe
         $sha = (Get-FileHash $exe -Algorithm SHA256).Hash.ToLower()
         if ($sha -ne $env:SHA256) { throw "SHA-256 du SDK Vulkan inattendu : $sha" }
-        Start-Process $exe -Wait -ArgumentList "--root", "C:\VulkanSDK\$env:VERSION", "--accept-licenses", "--default-answer", "--confirm-command", "install"
+        $p = Start-Process $exe -Wait -PassThru -ArgumentList "--root", "C:\VulkanSDK\$env:VERSION", "--accept-licenses", "--default-answer", "--confirm-command", "install"
+        if ($p.ExitCode) { throw "installeur du SDK Vulkan : code de sortie $($p.ExitCode)" }
+        if (-not (Test-Path "C:\VulkanSDK\$env:VERSION\Include\vulkan\vulkan.h")) { throw "SDK Vulkan incomplet : vulkan.h absent" }
 
     - name: Variables du SDK Vulkan
       shell: pwsh

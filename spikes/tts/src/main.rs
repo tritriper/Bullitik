@@ -92,6 +92,7 @@ fn main() -> Result<()> {
         std::fs::create_dir_all(dir)?;
     }
     let sentences = split_sentences(&args.text);
+    anyhow::ensure!(!sentences.is_empty(), "texte vide : rien à lire");
 
     println!("== Spike 0.2 — synthèse vocale ==");
     println!("Calcul      : CPU (Piper, onnxruntime)");

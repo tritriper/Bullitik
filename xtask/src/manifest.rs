@@ -38,6 +38,9 @@ pub struct Model {
 pub struct Runtime {
     pub name: String,
     pub os: String,
+    /// Exécutable attendu dans l'archive, sans extension (`llama-server`) :
+    /// vérifié après extraction et à chaque `fetch`.
+    pub bin: String,
     pub url: String,
     pub size: u64,
     pub sha256: String,
@@ -75,9 +78,10 @@ impl Manifest {
                 m.file
             );
             ensure!(
-                !m.file.is_empty() && !m.file.contains(['/', '\\']) && m.file != "..",
-                "{} : `file` doit être un simple nom de fichier",
-                m.id
+                safe_name(&m.file),
+                "{} : nom de fichier refusé : « {} »",
+                m.id,
+                m.file
             );
             check_common(&m.id, &m.url, m.size, &m.sha256, &m.license, &m.sets)?;
         }
@@ -90,8 +94,14 @@ impl Manifest {
             );
             ensure!(OSES.contains(&r.os.as_str()), "{label} : système inconnu");
             ensure!(
-                !r.name.is_empty() && !r.name.contains(['/', '\\']) && !r.name.starts_with('.'),
-                "{label} : `name` doit être un simple nom de dossier"
+                safe_name(&r.name),
+                "{label} : nom de dossier refusé : « {} »",
+                r.name
+            );
+            ensure!(
+                safe_name(&r.bin),
+                "{label} : nom d'exécutable refusé : « {} »",
+                r.bin
             );
             ensure!(
                 r.url.ends_with(".zip") || r.url.ends_with(".tar.gz"),
@@ -127,6 +137,26 @@ impl Manifest {
                 .collect(),
         })
     }
+}
+
+/// Un nom de fichier sûr sur Linux comme sur Windows : lettres ASCII, chiffres,
+/// `.`, `_`, `-` ; ni nom caché, ni point final, ni nom réservé de Windows
+/// (`CON`, `NUL`, `COM1`…), quelle que soit l'extension.
+pub fn safe_name(name: &str) -> bool {
+    const RESERVED: &[&str] = &["CON", "PRN", "AUX", "NUL"];
+    let stem = name.split('.').next().unwrap_or("").to_ascii_uppercase();
+    let numbered = (stem.starts_with("COM") || stem.starts_with("LPT"))
+        && stem.len() == 4
+        && stem.as_bytes()[3].is_ascii_digit();
+    !name.is_empty()
+        && name.len() <= 128
+        && name
+            .bytes()
+            .all(|b| b.is_ascii_alphanumeric() || matches!(b, b'.' | b'_' | b'-'))
+        && !name.starts_with('.')
+        && !name.ends_with('.')
+        && !RESERVED.contains(&stem.as_str())
+        && !numbered
 }
 
 fn check_common(
@@ -223,6 +253,24 @@ mod tests {
     #[test]
     fn chemin_dans_file_refuse() {
         assert!(Manifest::parse(&ONE.replace("\"a.bin\"", "\"../a.bin\"")).is_err());
+    }
+
+    #[test]
+    fn noms_surs() {
+        for ok in [
+            "ggml-small-q5_1.bin",
+            "fr_FR-siwis-medium.onnx.json",
+            "llama.cpp",
+            "llama-server",
+        ] {
+            assert!(safe_name(ok), "{ok}");
+        }
+        for ko in [
+            "", ".", "..", ".cache", "a/b", "a\\b", "x.", "con", "NUL.txt", "com1.bin", "a:b",
+            "a b", "é.bin",
+        ] {
+            assert!(!safe_name(ko), "{ko}");
+        }
     }
 
     #[test]

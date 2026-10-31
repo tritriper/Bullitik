@@ -124,8 +124,10 @@ fn main() -> Result<()> {
                 print!("\nEntrée pour parler, q puis Entrée pour finir > ");
                 std::io::stdout().flush()?;
                 let mut line = String::new();
-                std::io::stdin().read_line(&mut line)?;
-                if line.trim().eq_ignore_ascii_case("q") {
+                // 0 octet lu : fin de l'entrée (Ctrl-D, Ctrl-Z, entrée redirigée).
+                if std::io::stdin().read_line(&mut line)? == 0
+                    || line.trim().eq_ignore_ascii_case("q")
+                {
                     break;
                 }
                 print!("Parle… puis Entrée pour arrêter. ");

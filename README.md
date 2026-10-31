@@ -31,5 +31,7 @@ Statut : lot 0, spikes de faisabilité. Rien de jouable pour l'instant.
 
 ## Licence
 
-GPL-3.0-or-later, voir [`LICENSE`](LICENSE). La synthèse vocale Piper étant
-sous GPL-3.0, le jeu l'est aussi.
+GPL-3.0-or-later, voir [`LICENSE`](LICENSE). La synthèse vocale s'appuie sur
+espeak-ng (phonétisation), sous GPL-3.0 et compilé dans le jeu : le jeu est
+donc sous GPL lui aussi. Les autres composants et les crédits des voix sont
+dans [`docs/licences-tierces.md`](docs/licences-tierces.md).

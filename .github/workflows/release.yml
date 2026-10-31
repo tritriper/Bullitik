@@ -99,8 +99,12 @@ jobs:
     permissions:
       contents: write
     steps:
+      # Seulement nos deux artefacts : docker/setup-buildx dépose aussi un
+      # rapport de build (*.dockerbuild) que download-artifact ne sait pas
+      # extraire, ce qui faisait échouer la publication de v0.1.0-alpha.1.
       - uses: actions/download-artifact@v7
         with:
+          pattern: release-*
           path: dist
           merge-multiple: true
 

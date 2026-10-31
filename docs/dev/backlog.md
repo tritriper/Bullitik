@@ -9,7 +9,7 @@ l'[archive](backlog-archive.md) avec son numéro, et dans le
 **États** : 🧭 décision à prendre · ✅ prêt · 🚧 en cours · ⏳ en attente d'un
 autre item · 🧪 construit, reste à lancer.
 
-**Au 31 octobre 2026** : 1 décision · 4 en cours · 12 en attente.
+**Au 31 octobre 2026** : 1 décision · 5 en cours · 11 en attente.
 
 ## Lot 0 — Spikes de faisabilité
 
@@ -20,7 +20,7 @@ autre item · 🧪 construit, reste à lancer.
 | #4 | CI : tests à chaque push et pull request | 🚧 en cours (PR #2) | Chaque push lance lint et tests ; un échec bloque la fusion. |
 | #5 | CD : livrable portable Windows et Linux à chaque tag `v*` | ⏳ #4 | Un tag produit une release GitHub avec le zip et le texte du CHANGELOG. |
 | #6 | Spike 0.1 — reconnaissance vocale seule, latence mesurée | 🚧 en cours (PR #3) : reste la mesure sur PC AMD et NVIDIA | Je parle, le texte s'affiche ; rapport de latence dans `docs/spikes/`. |
-| #7 | Spike 0.2 — synthèse vocale seule, latence mesurée, choix de la voix | ⏳ #3 | Un texte est lu à voix haute ; rapport de latence et voix retenue. |
+| #7 | Spike 0.2 — synthèse vocale seule, latence mesurée, choix de la voix | 🚧 en cours (PR #4) : reste le choix de la voix et la mesure sur PC | Un texte est lu à voix haute ; rapport de latence et voix retenue. |
 | #8 | Spike 0.3 — modèle seul : intervieweur et juge en JSON, temps et VRAM mesurés | ⏳ #3 | Les deux rôles répondent ; rapport de temps de réponse et de mémoire GPU. |
 | #9 | Spike 0.4 — chaîne complète voix → texte → modèle → voix (optionnel) | ⏳ #6, #7, #8 | Une question complète passe de bout en bout ; latence totale mesurée. |
 | #18 | GPU dans le devcontainer : Vulkan via la couche Mesa « dozen » de WSL2 | ⏳ après le lot 0, si besoin | Un spike lancé dans le conteneur utilise la carte AMD ou NVIDIA de l'hôte. |

@@ -12,7 +12,8 @@ FROM ubuntu:24.04@sha256:fe81560990fae86dc4743202b2cb4d3df98d0bcf949173cecef15ce
 # La changer, c'est mettre à jour tous les paquets d'un coup.
 ARG UBUNTU_SNAPSHOT=20261030T000000Z
 
-# - build : compilateur C/C++, cmake et clang pour whisper.cpp et bindgen ;
+# - build : compilateur C/C++, cmake et clang pour whisper.cpp, espeak-ng et
+#   bindgen ; OpenSSL pour le téléchargement d'onnxruntime au build (ort-sys) ;
 # - Vulkan : en-têtes, compilateur de shaders, pilotes Mesa (dont lavapipe,
 #   Vulkan sur CPU, qui suffit pour compiler et tester sans GPU) ;
 # - son : ALSA pour cpal, redirigé vers PulseAudio (WSLg) par /etc/asound.conf.
@@ -25,7 +26,7 @@ RUN apt-get update \
       /etc/apt/sources.list.d/ubuntu.sources \
  && apt-get update \
  && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-      build-essential cmake clang libclang-dev pkg-config \
+      build-essential cmake clang libclang-dev pkg-config libssl-dev \
       ca-certificates curl git sudo \
       libvulkan-dev glslc mesa-vulkan-drivers vulkan-tools \
       libasound2-dev libasound2-plugins alsa-utils pulseaudio-utils \

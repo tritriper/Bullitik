@@ -9,7 +9,7 @@ l'[archive](backlog-archive.md) avec son numéro, et dans le
 **États** : 🧭 décision à prendre · ✅ prêt · 🚧 en cours · ⏳ en attente d'un
 autre item · 🧪 construit, reste à lancer.
 
-**Au 31 octobre 2026** : 1 décision · 3 à lancer · 4 prêts · 7 en attente.
+**Au 31 octobre 2026** : 1 décision · 3 à lancer · 5 prêts · 7 en attente.
 
 ## Lot 0 — Spikes de faisabilité
 
@@ -28,6 +28,7 @@ autre item · 🧪 construit, reste à lancer.
 | ID | Item | État | Fait quand |
 | --- | --- | --- | --- |
 | #22 | Méthode de recherche du lot 1 : état de l'art, documentation, expériences de validation (tests de performance du juge), critères pour garder ou écarter une technique | ✅ prêt | Méthode écrite dans `docs/recherche/`, validée par le responsable du projet. |
+| #23 | Recherche : novlangue (Orwell, Klemperer, Hazan, novlangue managériale) et post-vérité (Clément Viktorovitch, Frankfurt, McIntyre) ; prompt dans `docs/recherche/prompts/novlangue-post-verite.md` | ✅ prêt | Synthèse sourcée dans `docs/recherche/novlangue-post-verite.md`, avec les procédés comparés à la typologie de l'état de l'art. |
 | #11 | Typologie des techniques d'esquive retenue, avec définition et exemple ; part de la typologie proposée par #10 | ⏳ #22 | Fiche dans `content/juge/`. |
 | #12 | Règles du juge : prompt système, critères, schéma JSON de sortie | ⏳ #11 | Prompt et schéma dans `content/`, validés par un test. |
 | #13 | Jeu d'exemples annotés pour calibrer le juge | ⏳ #12 | Le juge retrouve la note attendue sur la majorité des exemples. |

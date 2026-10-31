@@ -1,0 +1,16 @@
+[package]
+name = "spike-llm"
+description = "Spike 0.3 : Ministral 3 dans llama.cpp, rôles d'intervieweur et de juge (JSON), temps et mémoire mesurés."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+anyhow = "1"
+bullitik-llm = { path = "../../crates/llm" }
+clap = { version = "4", features = ["derive"] }
+serde_json = "1"
+
+[lints]
+workspace = true

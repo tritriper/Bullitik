@@ -1,0 +1,24 @@
+[workspace]
+resolver = "3"
+members = ["xtask", "crates/*", "spikes/*"]
+
+[workspace.package]
+version = "0.0.0"
+edition = "2024"
+license = "GPL-3.0-or-later"
+repository = "https://github.com/tritriper/Bullitik"
+publish = false
+
+[workspace.lints.rust]
+unsafe_code = "deny"
+
+[workspace.lints.clippy]
+all = { level = "warn", priority = -1 }
+
+[profile.release]
+debug = "line-tables-only"
+
+# Dépendances optimisées même en debug : hachage des modèles, inférence
+# whisper.cpp et Piper restent rapides dans `cargo run` sans --release.
+[profile.dev.package."*"]
+opt-level = 3

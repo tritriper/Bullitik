@@ -1,0 +1,135 @@
+# Tout ce que le projet télécharge : modèles et binaires tiers.
+#
+# `cargo xtask fetch` lit ce fichier, télécharge chaque élément de l'ensemble
+# demandé, vérifie sa taille et son SHA-256, puis le range :
+#   - un modèle   → models/files/<file>
+#   - un runtime  → runtime/<name>/ (archive extraite), dont `bin` est
+#                   l'exécutable attendu (vérifié à chaque fetch)
+#
+# Les URL pointent vers un commit précis (Hugging Face) ou une build précise
+# (llama.cpp) : changer de version, c'est changer l'URL ET le SHA-256 ici.
+#
+# Ensembles (`sets`) :
+#   dev       ce qu'il faut pour lancer tous les spikes (défaut de `fetch`) ;
+#   ci        le minimum pour les tests de la CI, sur CPU ;
+#   optional  seulement à la demande (`--with <id>`).
+
+# --- LLM ---------------------------------------------------------------------
+
+[[model]]
+id = "ministral-3-8b"
+file = "Ministral-3-8B-Instruct-2512-Q4_K_M.gguf"
+url = "https://huggingface.co/mistralai/Ministral-3-8B-Instruct-2512-GGUF/resolve/0102285ad796bd99af90f58de616092e5630e970/Ministral-3-8B-Instruct-2512-Q4_K_M.gguf"
+size = 5198911904
+sha256 = "33e7a72cf5e6e2cfc2f2847075acc013d68bba023e35310cef86b5cf8fdca761"
+license = "Apache-2.0"
+sets = ["dev"]
+
+[[model]]
+id = "ministral-3-14b"
+file = "Ministral-3-14B-Instruct-2512-Q4_K_M.gguf"
+url = "https://huggingface.co/mistralai/Ministral-3-14B-Instruct-2512-GGUF/resolve/74fac473c43357d7fb2671713608183cc72496d0/Ministral-3-14B-Instruct-2512-Q4_K_M.gguf"
+size = 8239593024
+sha256 = "824e0f3373e69b84f2cae46fdcb9bd1ebc6ab3bfc7acc125d818b7b8178cc613"
+license = "Apache-2.0"
+sets = ["optional"]
+
+# --- Reconnaissance vocale (whisper.cpp) ---------------------------------------
+
+[[model]]
+id = "whisper-large-v3-turbo"
+file = "ggml-large-v3-turbo-q5_0.bin"
+url = "https://huggingface.co/ggerganov/whisper.cpp/resolve/5359861c739e955e79d9a303bcbc70fb988958b1/ggml-large-v3-turbo-q5_0.bin"
+size = 574041195
+sha256 = "394221709cd5ad1f40c46e6031ca61bce88931e6e088c188294c6d5a55ffa7e2"
+license = "MIT"
+sets = ["dev"]
+
+[[model]]
+id = "whisper-small"
+file = "ggml-small-q5_1.bin"
+url = "https://huggingface.co/ggerganov/whisper.cpp/resolve/5359861c739e955e79d9a303bcbc70fb988958b1/ggml-small-q5_1.bin"
+size = 190085487
+sha256 = "ae85e4a935d7a567bd102fe55afc16bb595bdb618e11b2fc7591bc08120411bb"
+license = "MIT"
+sets = ["dev", "ci"]
+
+# --- Synthèse vocale (voix Piper) ----------------------------------------------
+# Chaque voix = un modèle ONNX + sa configuration JSON.
+
+[[model]]
+id = "piper-siwis"
+file = "fr_FR-siwis-medium.onnx"
+url = "https://huggingface.co/rhasspy/piper-voices/resolve/b4e358ffcb232591bf73a540e70f7de528e4174a/fr/fr_FR/siwis/medium/fr_FR-siwis-medium.onnx"
+size = 63201294
+sha256 = "641d1ab097da2b81128c076810edb052b385decc8be3381814802a64a73baf99"
+license = "CC-BY-4.0"
+sets = ["dev", "ci"]
+
+[[model]]
+id = "piper-siwis-config"
+file = "fr_FR-siwis-medium.onnx.json"
+url = "https://huggingface.co/rhasspy/piper-voices/resolve/b4e358ffcb232591bf73a540e70f7de528e4174a/fr/fr_FR/siwis/medium/fr_FR-siwis-medium.onnx.json"
+size = 4875
+sha256 = "39479916c2db192b5ac9764daddd0c744d83e023ad890c6976c0633ae4df8959"
+license = "CC-BY-4.0"
+sets = ["dev", "ci"]
+
+[[model]]
+id = "piper-upmc"
+file = "fr_FR-upmc-medium.onnx"
+url = "https://huggingface.co/rhasspy/piper-voices/resolve/b4e358ffcb232591bf73a540e70f7de528e4174a/fr/fr_FR/upmc/medium/fr_FR-upmc-medium.onnx"
+size = 76733615
+sha256 = "9abb3800c199148897a9ed64e100d224f3de83579f100044174ad19418f1786f"
+license = "CC-BY-SA-4.0"
+sets = ["dev"]
+
+[[model]]
+id = "piper-upmc-config"
+file = "fr_FR-upmc-medium.onnx.json"
+url = "https://huggingface.co/rhasspy/piper-voices/resolve/b4e358ffcb232591bf73a540e70f7de528e4174a/fr/fr_FR/upmc/medium/fr_FR-upmc-medium.onnx.json"
+size = 4996
+sha256 = "e8636ec15dfd5d72db37a02cb5320a20f2b8d339f2a0e4337da64c58a33a5868"
+license = "CC-BY-SA-4.0"
+sets = ["dev"]
+
+[[model]]
+id = "piper-tom"
+file = "fr_FR-tom-medium.onnx"
+url = "https://huggingface.co/rhasspy/piper-voices/resolve/b4e358ffcb232591bf73a540e70f7de528e4174a/fr/fr_FR/tom/medium/fr_FR-tom-medium.onnx"
+size = 63511038
+sha256 = "bf65074ccdeeeeaa832e75edb1c0a513c01c9a972bdf085ff8a6e71ea234fd41"
+license = "AGPL-3.0"
+sets = ["dev"]
+
+[[model]]
+id = "piper-tom-config"
+file = "fr_FR-tom-medium.onnx.json"
+url = "https://huggingface.co/rhasspy/piper-voices/resolve/b4e358ffcb232591bf73a540e70f7de528e4174a/fr/fr_FR/tom/medium/fr_FR-tom-medium.onnx.json"
+size = 4959
+sha256 = "2f7f885ad5a0aad802e3cc24e4f57239febdcb142b4876de5d238094674361cc"
+license = "AGPL-3.0"
+sets = ["dev"]
+
+# --- Binaires tiers ------------------------------------------------------------
+# Un seul par système : `fetch` ne prend que celui du système courant.
+
+[[runtime]]
+name = "llama.cpp"
+os = "linux"
+bin = "llama-server"
+url = "https://github.com/ggml-org/llama.cpp/releases/download/b11960/llama-b11960-bin-ubuntu-vulkan-x64.tar.gz"
+size = 35474467
+sha256 = "164199e978304bb32a8a6c24b8efa015528ddf286821596eab676c90b375feac"
+license = "MIT"
+sets = ["dev"]
+
+[[runtime]]
+name = "llama.cpp"
+os = "windows"
+bin = "llama-server"
+url = "https://github.com/ggml-org/llama.cpp/releases/download/b11960/llama-b11960-bin-win-vulkan-x64.zip"
+size = 37345851
+sha256 = "bac6914b5e83523eb008c6789eaa12669f93fbc196c3b9e8237b6672323b33e9"
+license = "MIT"
+sets = ["dev"]

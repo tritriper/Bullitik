@@ -1,0 +1,43 @@
+# SDK Vulkan de LunarG sous Windows, pour compiler whisper.cpp avec Vulkan.
+# Partagé par la CI et la CD : une seule version, un seul SHA-256.
+name: SDK Vulkan (Windows)
+description: Installe le SDK Vulkan épinglé, avec cache, et exporte VULKAN_SDK.
+inputs:
+  version:
+    description: Version du SDK
+    default: 1.4.363.0
+  sha256:
+    description: SHA-256 de l'installeur (https://vulkan.lunarg.com/sdk/files.json)
+    default: 94a82d378f7a5e3e54c9db7d2fb7016af136e14ac0a18dbf0f2f67a36352d141
+runs:
+  using: composite
+  steps:
+    - name: Cache du SDK Vulkan
+      id: cache
+      uses: actions/cache@v6
+      with:
+        path: C:\VulkanSDK\${{ inputs.version }}
+        key: vulkan-sdk-${{ inputs.version }}
+
+    - name: Installation du SDK Vulkan
+      if: steps.cache.outputs.cache-hit != 'true'
+      shell: pwsh
+      env:
+        VERSION: ${{ inputs.version }}
+        SHA256: ${{ inputs.sha256 }}
+      run: |
+        $exe = "$env:RUNNER_TEMP\vulkansdk.exe"
+        Invoke-WebRequest "https://sdk.lunarg.com/sdk/download/$env:VERSION/windows/vulkansdk-windows-X64-$env:VERSION.exe" -OutFile $exe
+        $sha = (Get-FileHash $exe -Algorithm SHA256).Hash.ToLower()
+        if ($sha -ne $env:SHA256) { throw "SHA-256 du SDK Vulkan inattendu : $sha" }
+        $p = Start-Process $exe -Wait -PassThru -ArgumentList "--root", "C:\VulkanSDK\$env:VERSION", "--accept-licenses", "--default-answer", "--confirm-command", "install"
+        if ($p.ExitCode) { throw "installeur du SDK Vulkan : code de sortie $($p.ExitCode)" }
+        if (-not (Test-Path "C:\VulkanSDK\$env:VERSION\Include\vulkan\vulkan.h")) { throw "SDK Vulkan incomplet : vulkan.h absent" }
+
+    - name: Variables du SDK Vulkan
+      shell: pwsh
+      env:
+        VERSION: ${{ inputs.version }}
+      run: |
+        "VULKAN_SDK=C:\VulkanSDK\$env:VERSION" >> $env:GITHUB_ENV
+        "C:\VulkanSDK\$env:VERSION\Bin" >> $env:GITHUB_PATH

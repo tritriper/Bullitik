@@ -1,0 +1,20 @@
+# Modèles téléchargés : seul le manifeste (URL, taille, SHA-256) est versionné.
+/models/*
+!/models/manifest.toml
+
+# Binaires tiers téléchargés (llama.cpp…) et livrables construits.
+/runtime
+/dist/
+
+# Build Rust.
+/target/
+
+# Enregistrements et journaux locaux des spikes.
+/spikes/**/out/
+
+# Éditeurs et systèmes.
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db

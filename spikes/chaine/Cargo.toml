@@ -1,0 +1,17 @@
+[package]
+name = "spike-chaine"
+description = "Spike 0.4 : chaîne complète voix → texte → modèle → voix sur une question, latence de dialogue mesurée."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+anyhow = "1"
+bullitik-audio = { path = "../../crates/audio" }
+bullitik-llm = { path = "../../crates/llm" }
+bullitik-voice = { path = "../../crates/voice" }
+clap = { version = "4", features = ["derive"] }
+
+[lints]
+workspace = true

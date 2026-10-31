@@ -1,0 +1,3 @@
+[alias]
+# Tâches du projet écrites en Rust : `cargo xtask --help`.
+xtask = "run --quiet --package xtask --"

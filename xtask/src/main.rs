@@ -122,17 +122,21 @@ fn load_manifest(root: &Path) -> Result<manifest::Manifest> {
     manifest::Manifest::parse(&text).with_context(|| path.display().to_string())
 }
 
-/// La racine du dépôt (le dossier parent de `xtask/`) si elle existe sur cette
-/// machine, sinon le dossier courant : c'est le cas de `xtask.exe` livré avec
-/// les exécutables des spikes.
+/// Le dossier de travail, dans cet ordre :
+///   1. le dossier courant s'il contient `models/manifest.toml` (cas de
+///      `xtask.exe` lancé dans le dossier livré des spikes, et de `cargo xtask`
+///      lancé à la racine du dépôt) ;
+///   2. la racine du dépôt où xtask a été compilé, si elle existe encore ;
+///   3. le dossier courant.
 fn default_root() -> PathBuf {
+    let has_manifest = |dir: &Path| dir.join("models").join("manifest.toml").is_file();
+    let cwd = PathBuf::from(".");
+    if has_manifest(&cwd) {
+        return cwd;
+    }
     let repo = Path::new(env!("CARGO_MANIFEST_DIR"))
         .parent()
         .map(Path::to_path_buf)
         .unwrap_or_default();
-    if repo.join("models").join("manifest.toml").is_file() {
-        repo
-    } else {
-        PathBuf::from(".")
-    }
+    if has_manifest(&repo) { repo } else { cwd }
 }

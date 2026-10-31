@@ -17,6 +17,7 @@ ci-dessous y renvoient.
 - Organisation du dépôt (#2) : git flow `main` / `dev` / branches de travail, backlog numéroté, CHANGELOG, modèles de pull request et d'item de backlog, règles des agents, licence GPL-3.0-or-later.
 
 ### Corrigé
+- xtask : lancé dans un dossier qui contient `models/manifest.toml`, il travaille dans ce dossier, même si le dépôt où il a été compilé existe sur la machine (sur le runner Windows, les modèles partaient dans le dépôt au lieu du dossier livré).
 - spike-stt : sur un PC sans pilote Vulkan, le programme avortait au démarrage, même avec `--cpu` (exception C++ de ggml) ; les cartes sont désormais listées par le registre de backends de ggml, qui renvoie une liste vide.
 
 ### CI / build

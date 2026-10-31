@@ -9,13 +9,12 @@ l'[archive](backlog-archive.md) avec son numéro, et dans le
 **États** : 🧭 décision à prendre · ✅ prêt · 🚧 en cours · ⏳ en attente d'un
 autre item · 🧪 construit, reste à lancer.
 
-**Au 31 octobre 2026** : 1 décision · 4 à lancer · 4 prêts · 7 en attente.
+**Au 31 octobre 2026** : 1 décision · 3 à lancer · 4 prêts · 7 en attente.
 
 ## Lot 0 — Spikes de faisabilité
 
 | ID | Item | État | Fait quand |
 | --- | --- | --- | --- |
-| #5 | CD : livrable portable Windows et Linux à chaque tag `v*` | 🧪 à lancer : fusionné dans `dev` (PR #7), reste un premier tag pour l'essayer | Un tag produit une release GitHub avec le zip et le texte du CHANGELOG. |
 | #6 | Spike 0.1 — reconnaissance vocale seule, latence mesurée | 🧪 à lancer : mesuré sur AMD (2 s en turbo, 1 s en small), reste une carte NVIDIA | Je parle, le texte s'affiche ; rapport de latence dans `docs/spikes/`. |
 | #8 | Spike 0.3 — modèle seul : intervieweur et juge en JSON, temps et VRAM mesurés | 🧪 à lancer : mesuré sur AMD (question 0,8 s, juge 2,4 s, 5,9 Go), reste une carte NVIDIA | Les deux rôles répondent ; rapport de temps de réponse et de mémoire GPU. |
 | #9 | Spike 0.4 — chaîne complète voix → texte → modèle → voix (optionnel) | 🧪 à lancer : 3,0 s de latence de dialogue sur AMD (seuil : 3 s), reste une carte NVIDIA | Une question complète passe de bout en bout ; latence totale mesurée. |

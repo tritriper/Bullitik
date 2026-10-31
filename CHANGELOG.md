@@ -27,6 +27,7 @@ ci-dessous y renvoient.
 - xtask fetch : un runtime dont l'exécutable a disparu est réextrait ; noms de fichiers du manifeste limités à une liste blanche sûre sous Windows.
 - spike-stt : la fin de l'entrée (Ctrl-D, Ctrl-Z) termine la boucle au lieu de tourner sans fin.
 - spike-tts : un texte vide est refusé proprement au lieu de paniquer ; audio : WAV à 0 Hz refusé, fin du son protégée par un silence de garde.
+- spike-stt : sur un PC sans pilote Vulkan, le programme avortait au démarrage, même avec `--cpu` (exception C++ de ggml) ; les cartes sont désormais listées par le registre de backends de ggml, qui renvoie une liste vide.
 
 ### CI / build
 - Socle Rust (#3) : workspace Cargo, toolchain 1.99.1 épinglée, `cargo xtask fetch` qui télécharge les modèles et llama.cpp de `models/manifest.toml` et vérifie leur SHA-256, `cargo xtask changelog check|extract`.

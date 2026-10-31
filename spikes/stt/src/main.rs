@@ -72,8 +72,10 @@ fn main() -> Result<()> {
 
     let free_before = gpus.first().map(|g| g.vram.free);
     let t = Instant::now();
-    let mut ctx_params = WhisperContextParameters::default();
-    ctx_params.use_gpu = use_gpu;
+    let ctx_params = WhisperContextParameters {
+        use_gpu,
+        ..Default::default()
+    };
     let model = args.model.to_str().context("chemin de modèle non UTF-8")?;
     let ctx = WhisperContext::new_with_params(model, ctx_params)
         .with_context(|| format!("chargement de {model} (lancer `cargo xtask fetch` ?)"))?;
@@ -228,8 +230,10 @@ mod tests {
         let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../..");
         let model = root.join("models/files/ggml-small-q5_1.bin");
         let wav = root.join("spikes/stt/testdata/phrase.wav");
-        let mut params = WhisperContextParameters::default();
-        params.use_gpu = false;
+        let params = WhisperContextParameters {
+            use_gpu: false,
+            ..Default::default()
+        };
         let ctx = WhisperContext::new_with_params(model.to_str().unwrap(), params).unwrap();
         let mut state = ctx.create_state().unwrap();
         let clip = bullitik_audio::read_wav(&wav).unwrap();

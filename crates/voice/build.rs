@@ -3,7 +3,7 @@
 
 fn main() {
     let out = std::path::PathBuf::from(std::env::var("OUT_DIR").expect("OUT_DIR"));
-    // OUT_DIR = target/<profil>/build/spike-tts-<hash>/out
+    // OUT_DIR = target/<profil>/build/bullitik-voice-<hash>/out
     if let Some(profile_dir) = out.ancestors().nth(3) {
         println!(
             "cargo:rustc-env=BULLITIK_PROFILE_DIR={}",

@@ -51,6 +51,8 @@ commande ne retélécharge rien.
 | 0.2 Une voix, un texte | `.\spike-tts.exe --voice upmc-pierre --text "Bonsoir."` |
 | 0.3 Intervieweur et juge, Ministral 3 8B | `.\spike-llm.exe` |
 | 0.3 Le même sur CPU, pour comparer | `.\spike-llm.exe --cpu` |
+| 0.4 Chaîne complète, au micro, voix upmc-pierre | `.\spike-chaine.exe` |
+| 0.4 Avec une autre voix | `.\spike-chaine.exe --voice tom` |
 | 0.3 Avec le 14B (après `.\xtask.exe fetch --with ministral-3-14b`) | `.\spike-llm.exe --model models\files\Ministral-3-14B-Instruct-2512-Q4_K_M.gguf` |
 
 Chaque spike affiche la carte graphique utilisée, ses mesures, puis un résumé

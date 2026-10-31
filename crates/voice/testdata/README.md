@@ -1,4 +1,4 @@
-# Données de test du spike 0.1
+# Données de test de la reconnaissance vocale
 
 `phrase.wav` : 7,3 s de parole, mono, 22 050 Hz, générée par synthèse vocale
 Piper (piper-tts 1.8.0) avec la voix `fr_FR-siwis-medium` :

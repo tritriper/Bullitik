@@ -54,6 +54,11 @@ pub struct Notation {
     pub explication: String,
 }
 
+/// Lit la réponse JSON du juge.
+pub fn parse_notation(text: &str) -> serde_json::Result<Notation> {
+    serde_json::from_str(text)
+}
+
 impl Notation {
     /// Score sur 100, calculé par le code et non par le modèle (proposition à
     /// valider au lot 1) : une réponse donnée vaut 0 ; sinon, pertinence ×

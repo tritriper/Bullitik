@@ -9,7 +9,13 @@ use std::io::{self, Write};
 use std::path::{Path, PathBuf};
 
 /// Les exécutables livrés, sans extension.
-const BINARIES: &[&str] = &["spike-stt", "spike-tts", "spike-llm", "xtask"];
+const BINARIES: &[&str] = &[
+    "spike-stt",
+    "spike-tts",
+    "spike-llm",
+    "spike-chaine",
+    "xtask",
+];
 
 pub struct Options<'a> {
     /// Dossier où créer le dossier livré (et le zip).
@@ -50,11 +56,11 @@ pub fn run(root: &Path, opts: &Options) -> Result<PathBuf> {
     copy_dir(&espeak_data(&target)?, &dir.join("espeak-ng-data"))?;
     fs::create_dir_all(dir.join("testdata"))?;
     fs::copy(
-        root.join("spikes/stt/testdata/phrase.wav"),
+        root.join("crates/voice/testdata/phrase.wav"),
         dir.join("testdata/phrase.wav"),
     )?;
     fs::copy(
-        root.join("spikes/stt/testdata/README.md"),
+        root.join("crates/voice/testdata/README.md"),
         dir.join("testdata/README.md"),
     )?;
     fs::copy(root.join("LICENSE"), dir.join("LICENSE.txt"))?;

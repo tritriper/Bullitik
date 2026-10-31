@@ -10,6 +10,8 @@ ci-dessous y renvoient.
 ## [Non publié]
 
 ### Ajouté
+- Spike 0.3, modèle seul (#8) : `spike-llm` lance llama-server (Vulkan) avec Ministral 3 8B, fait poser des questions et une relance par l'intervieweur et noter des réponses annotées par le juge en JSON imposé par un schéma, et mesure temps de réponse et mémoire par appareil ; rapport dans `docs/spikes/0.3-llm.md`.
+- Contenus provisoires du spike 0.3 dans `content/` : prompts de l'intervieweur et du juge, fiche des techniques d'esquive, schéma JSON de la notation, questions, réponses annotées ; leur cohérence est testée.
 - Spike 0.2, synthèse vocale seule (#7) : `spike-tts` lit une question d'intervieweur avec Piper sur CPU, phrase par phrase, pour 4 voix candidates (siwis, upmc-jessica, upmc-pierre, tom), et mesure chargement, délai avant le premier son et temps réel ; rapport dans `docs/spikes/0.2-tts.md`.
 - Spike 0.1, reconnaissance vocale seule (#6) : `spike-stt` transcrit le micro (Entrée pour parler, Entrée pour arrêter) ou un WAV avec whisper.cpp en Vulkan, et mesure latence, temps réel et VRAM ; rapport dans `docs/spikes/0.1-stt.md`.
 - Organisation du dépôt (#2) : git flow `main` / `dev` / branches de travail, backlog numéroté, CHANGELOG, modèles de pull request et d'item de backlog, règles des agents, licence GPL-3.0-or-later.

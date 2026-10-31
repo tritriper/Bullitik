@@ -12,8 +12,9 @@ Dans un terminal PowerShell ouvert dans ce dossier :
 .\xtask.exe fetch
 ```
 
-Environ 6,2 Go arrivent dans `models\files\` ; chaque fichier est vérifié par
-SHA-256. Relancer la commande ne retélécharge rien.
+Environ 6,2 Go arrivent dans `models\files\`, et llama.cpp dans
+`runtime\llama.cpp\` ; chaque fichier est vérifié par SHA-256. Relancer la
+commande ne retélécharge rien.
 
 ## Lancer un spike
 
@@ -24,6 +25,9 @@ SHA-256. Relancer la commande ne retélécharge rien.
 | 0.1 Forcer le CPU, pour comparer | `.\spike-stt.exe --cpu` |
 | 0.2 Synthèse vocale, les 4 voix l'une après l'autre | `.\spike-tts.exe` |
 | 0.2 Une voix, un texte | `.\spike-tts.exe --voice upmc-pierre --text "Bonsoir."` |
+| 0.3 Intervieweur et juge, Ministral 3 8B | `.\spike-llm.exe` |
+| 0.3 Le même sur CPU, pour comparer | `.\spike-llm.exe --cpu` |
+| 0.3 Avec le 14B (après `.\xtask.exe fetch --with ministral-3-14b`) | `.\spike-llm.exe --model models\files\Ministral-3-14B-Instruct-2512-Q4_K_M.gguf` |
 
 Chaque spike affiche la carte graphique utilisée, ses mesures, puis un résumé
 à recopier dans le rapport du spike (`docs/spikes/` dans le dépôt).

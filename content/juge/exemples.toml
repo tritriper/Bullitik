@@ -1,0 +1,28 @@
+# Réponses annotées pour vérifier le juge (provisoire, spike 0.3 ; le lot 1
+# en fera un vrai jeu de calibration, #13).
+# `attendu` : ce qu'un bon juge doit trouver ; les notes chiffrées sont
+# laissées libres, seul leur ordre compte (voir docs/spikes/0.3-llm.md).
+
+[[exemple]]
+nom = "réponse directe"
+question = "Qui est responsable de la baisse du pouvoir d'achat ?"
+reponse = "Clairement, c'est l'inflation sur l'énergie et l'alimentation depuis deux ans, et le gouvernement n'a pas assez indexé les salaires."
+attendu = { a_repondu = true, technique = "aucune" }
+
+[[exemple]]
+nom = "esquive discrète"
+question = "Qui est responsable de la baisse du pouvoir d'achat ?"
+reponse = "Vous savez, ce que je retiens, c'est que les Français veulent que leur travail paie. C'est pour ça que nous avons ouvert un grand chantier sur les salaires avec les partenaires sociaux, parce que c'est par le dialogue qu'on obtient des résultats durables."
+attendu = { a_repondu = false }
+
+[[exemple]]
+nom = "esquive grossière"
+question = "Qui est responsable de la baisse du pouvoir d'achat ?"
+reponse = "Je ne vais pas répondre à ça. Parlons plutôt du match de foot de ce soir, il va être formidable."
+attendu = { a_repondu = false }
+
+[[exemple]]
+nom = "attaque du journaliste"
+question = "Qui est responsable de la baisse du pouvoir d'achat ?"
+reponse = "Votre question est caricaturale. Vous cherchez des coupables au lieu de parler des solutions, c'est exactement ce qui abîme le débat public."
+attendu = { a_repondu = false, technique = "attaquer le journaliste" }

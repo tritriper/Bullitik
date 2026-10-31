@@ -3,8 +3,9 @@
 #   linux    construit l'image du devcontainer (cache GitHub) et lance dedans
 #            format, lint, tests, manifeste et CHANGELOG : la CI vérifie
 #            exactement l'environnement de développement.
-#   windows  même lint et mêmes tests sur un runner Windows natif, la cible
-#            principale du livrable.
+#   windows  même lint et mêmes tests sur un runner Windows natif, puis les
+#            exécutables des spikes, publiés en artefact
+#            « bullitik-spikes-windows » pour les mesures sur un PC Windows.
 #
 # Les pull requests venues d'un fork lancent aussi la CI (un push sur ce dépôt
 # la lance déjà pour ses propres branches : pas de double exécution).
@@ -25,6 +26,10 @@ permissions:
 
 env:
   CARGO_TERM_COLOR: always
+  # SDK Vulkan de LunarG pour compiler whisper.cpp sous Windows : version et
+  # SHA-256 de l'installeur (https://vulkan.lunarg.com/sdk/files.json).
+  VULKAN_SDK_VERSION: 1.4.363.0
+  VULKAN_SDK_SHA256: 94a82d378f7a5e3e54c9db7d2fb7016af136e14ac0a18dbf0f2f67a36352d141
 
 jobs:
   linux:
@@ -55,12 +60,20 @@ jobs:
           key: linux-cargo-${{ hashFiles('Cargo.lock', 'rust-toolchain.toml', '.devcontainer/Dockerfile') }}
           restore-keys: linux-cargo-
 
+      - name: Cache des modèles de la CI
+        uses: actions/cache@v6
+        with:
+          path: ~/models
+          key: models-ci-${{ hashFiles('models/manifest.toml') }}
+          restore-keys: models-ci-
+
       - name: Format, lint et tests dans le devcontainer
         run: |
-          mkdir -p ~/cargo-registry target
+          mkdir -p ~/cargo-registry ~/models target
           docker run --rm --user root \
             -v "$PWD":/workspaces/Bullitik \
             -v ~/cargo-registry:/home/ubuntu/.cargo/registry \
+            -v ~/models:/workspaces/Bullitik/models/files \
             bullitik-dev:ci \
             bash -euxo pipefail -c '
               cargo fmt --all --check
@@ -68,6 +81,8 @@ jobs:
               cargo test --locked
               cargo xtask check-manifest
               cargo xtask changelog check
+              cargo xtask fetch --set ci
+              cargo test --release --locked -- --ignored
             '
 
   windows:
@@ -77,6 +92,29 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      - name: Cache du SDK Vulkan
+        id: vulkan-sdk
+        uses: actions/cache@v6
+        with:
+          path: C:\VulkanSDK\${{ env.VULKAN_SDK_VERSION }}
+          key: vulkan-sdk-${{ env.VULKAN_SDK_VERSION }}
+
+      - name: Installation du SDK Vulkan
+        if: steps.vulkan-sdk.outputs.cache-hit != 'true'
+        shell: pwsh
+        run: |
+          $exe = "$env:RUNNER_TEMP\vulkansdk.exe"
+          Invoke-WebRequest "https://sdk.lunarg.com/sdk/download/$env:VULKAN_SDK_VERSION/windows/vulkansdk-windows-X64-$env:VULKAN_SDK_VERSION.exe" -OutFile $exe
+          $sha = (Get-FileHash $exe -Algorithm SHA256).Hash.ToLower()
+          if ($sha -ne $env:VULKAN_SDK_SHA256) { throw "SHA-256 du SDK Vulkan inattendu : $sha" }
+          Start-Process $exe -Wait -ArgumentList "--root", "C:\VulkanSDK\$env:VULKAN_SDK_VERSION", "--accept-licenses", "--default-answer", "--confirm-command", "install"
+
+      - name: Variables du SDK Vulkan
+        shell: pwsh
+        run: |
+          "VULKAN_SDK=C:\VulkanSDK\$env:VULKAN_SDK_VERSION" >> $env:GITHUB_ENV
+          "C:\VulkanSDK\$env:VULKAN_SDK_VERSION\Bin" >> $env:GITHUB_PATH
+
       - uses: Swatinem/rust-cache@v2
 
       - name: Lint
@@ -84,3 +122,22 @@ jobs:
 
       - name: Tests
         run: cargo test --locked
+
+      - name: Exécutables des spikes
+        run: cargo build --release --locked --workspace --bins
+
+      - name: Dossier des spikes pour Windows
+        shell: pwsh
+        run: |
+          $d = "bullitik-spikes-windows"
+          New-Item -ItemType Directory -Force "$d\models" | Out-Null
+          Copy-Item target\release\spike-*.exe, target\release\xtask.exe $d
+          Copy-Item models\manifest.toml "$d\models"
+          Copy-Item docs\spikes\windows.md "$d\LISEZMOI.md"
+          if (Test-Path content) { Copy-Item -Recurse content $d }
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: bullitik-spikes-windows
+          path: bullitik-spikes-windows
+          retention-days: 30

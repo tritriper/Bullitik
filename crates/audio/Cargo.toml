@@ -1,0 +1,15 @@
+[package]
+name = "bullitik-audio"
+description = "Micro, haut-parleurs, WAV et rééchantillonnage pour les spikes de Bullitik."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+anyhow = "1"
+cpal = "0.18"
+hound = "3.5"
+
+[lints]
+workspace = true

@@ -116,7 +116,7 @@ fn main() -> Result<()> {
     if let (true, Some(before)) = (use_gpu, free_before) {
         let after = stt::gpus()[0].free_bytes;
         println!(
-            "VRAM prise  : ~{} Mio (Whisper + llama-server, mémoire libre avant/après)",
+            "VRAM Whisper: ~{} Mio (mémoire libre avant/après ; llama-server, autre processus, est compté dans le résumé)",
             before.saturating_sub(after) >> 20
         );
     }

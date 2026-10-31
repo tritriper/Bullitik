@@ -54,7 +54,12 @@ function Lancer([string]$titre, [string]$exe, [string[]]$arguments) {
     Ajouter '```text'
     $debut = Get-Date
     # 2>&1 : les erreurs des spikes vont aussi dans le rapport.
-    & ".\$exe" @arguments 2>&1 | ForEach-Object { Ajouter "$_" }
+    # Sous Windows PowerShell 5.1, chaque ligne de stderr devient une ErrorRecord ;
+    # une ligne vide s'y affiche « System.Management.Automation.RemoteException ».
+    & ".\$exe" @arguments 2>&1 | ForEach-Object {
+        $ligne = if ($_ -is [System.Management.Automation.ErrorRecord]) { $_.Exception.Message } else { "$_" }
+        if ($ligne -ne 'System.Management.Automation.RemoteException') { Ajouter $ligne }
+    }
     $code = $LASTEXITCODE
     Ajouter '```'
     $duree = [math]::Round(((Get-Date) - $debut).TotalSeconds, 1)
@@ -67,10 +72,12 @@ Ajouter ''
 Ajouter '## Machine'
 Ajouter ''
 $os = Get-CimInstance Win32_OperatingSystem
-$cpu = Get-CimInstance Win32_Processor | Select-Object -First 1
+# Le registre plutôt que WMI : Win32_Processor est revenu vide sur un Windows 11 récent.
+$nomCpu = (Get-ItemProperty -LiteralPath 'HKLM:\HARDWARE\DESCRIPTION\System\CentralProcessor\0' -ErrorAction SilentlyContinue).ProcessorNameString
+if (-not $nomCpu) { $nomCpu = 'inconnu' }
 $ram = [math]::Round($os.TotalVisibleMemorySize / 1MB, 1)
 Ajouter "- Système : $($os.Caption) $($os.Version)"
-Ajouter "- Processeur : $($cpu.Name.Trim()) ($($cpu.NumberOfCores) cœurs, $($cpu.NumberOfLogicalProcessors) threads)"
+Ajouter "- Processeur : $($nomCpu.Trim()) ($([Environment]::ProcessorCount) threads)"
 Ajouter "- Mémoire vive : $ram Go"
 foreach ($gpu in Get-CimInstance Win32_VideoController) {
     # AdapterRAM plafonne à 4 Go dans WMI : la VRAM réelle est donnée par les spikes.

@@ -3,7 +3,7 @@
 !/models/manifest.toml
 
 # Binaires tiers téléchargés (llama.cpp…) et livrables construits.
-/runtime/
+/runtime
 /dist/
 
 # Build Rust.

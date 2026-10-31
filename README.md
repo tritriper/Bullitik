@@ -23,6 +23,8 @@ Statut : lot 0, spikes de faisabilité. Rien de jouable pour l'instant.
 | Ce qui reste à faire | [`docs/dev/backlog.md`](docs/dev/backlog.md) |
 | Ce qui a été livré | [`CHANGELOG.md`](CHANGELOG.md) |
 | Installer l'environnement (devcontainer) | [`docs/dev/setup.md`](docs/dev/setup.md) |
+| Mesurer les spikes sur un PC Windows | [`docs/spikes/windows.md`](docs/spikes/windows.md) |
+| Travailler avec Claude Code sur son PC | [`docs/dev/session-locale.md`](docs/dev/session-locale.md) |
 | Comment contribuer (git flow, PR) | [`docs/dev/contributing.md`](docs/dev/contributing.md) |
 | Règles pour les agents de code | [`AGENTS.md`](AGENTS.md) |
 | Conception et plan de développement | documents vivants hors dépôt, liés depuis [`AGENTS.md`](AGENTS.md) |

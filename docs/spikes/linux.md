@@ -23,5 +23,6 @@ Environ 6,2 Go arrivent dans `models/files/`, et llama.cpp dans
 | 0.1 Sur le fichier de test, 5 mesures | `./spike-stt --wav testdata/phrase.wav --repeat 5` |
 | 0.2 Synthèse vocale, les 4 voix | `./spike-tts` |
 | 0.3 Intervieweur et juge | `./spike-llm` |
+| 0.4 Chaîne complète, au micro | `./spike-chaine` |
 
 Ajouter `--cpu` à `spike-stt` ou `spike-llm` pour comparer avec le processeur.

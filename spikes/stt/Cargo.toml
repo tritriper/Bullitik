@@ -10,7 +10,7 @@ publish.workspace = true
 anyhow = "1"
 bullitik-audio = { path = "../../crates/audio" }
 clap = { version = "4", features = ["derive"] }
-whisper-rs = { version = "0.16", features = ["vulkan"] }
+bullitik-voice = { path = "../../crates/voice" }
 
 [lints]
 workspace = true

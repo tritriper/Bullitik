@@ -9,11 +9,8 @@ publish.workspace = true
 [dependencies]
 anyhow = "1"
 bullitik-audio = { path = "../../crates/audio" }
+bullitik-voice = { path = "../../crates/voice" }
 clap = { version = "4", features = ["derive"] }
-piper-rs = "0.2"
 
 [lints]
 workspace = true
-
-[dev-dependencies]
-whisper-rs = { version = "0.16", features = ["vulkan"] }

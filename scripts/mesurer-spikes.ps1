@@ -15,7 +15,7 @@
       2. télécharge les modèles s'ils manquent (xtask fetch, vérifiés par SHA-256) ;
       3. lance chaque spike sur des entrées fixes, sans micro ni écoute :
          reconnaissance vocale sur testdata\phrase.wav, synthèse des 4 voix,
-         intervieweur et juge ;
+         intervieweur et juge, chaîne complète (le WAV tient lieu de réponse) ;
       4. écrit tout dans mesures-<machine>-<date>.md.
 
 .PARAMETER Avec14B
@@ -89,6 +89,7 @@ Lancer 'Spike 0.1 — reconnaissance vocale, GPU, Whisper turbo' 'spike-stt.exe'
 Lancer 'Spike 0.1 — reconnaissance vocale, GPU, Whisper small' 'spike-stt.exe' @('--wav', $phrase, '--repeat', '5', '--model', 'models\files\ggml-small-q5_1.bin')
 Lancer 'Spike 0.2 — synthèse vocale, 4 voix, CPU' 'spike-tts.exe' @('--no-play', '--repeat', '3')
 Lancer 'Spike 0.3 — intervieweur et juge, Ministral 3 8B, GPU' 'spike-llm.exe' @('--questions', '4')
+Lancer 'Spike 0.4 — chaîne complète, réponse lue dans le WAV de test, GPU' 'spike-chaine.exe' @('--reponse-wav', $phrase, '--no-play')
 if ($Avec14B) {
     Lancer 'Spike 0.3 — intervieweur et juge, Ministral 3 14B, GPU' 'spike-llm.exe' @('--questions', '4', '--model', 'models\files\Ministral-3-14B-Instruct-2512-Q4_K_M.gguf')
 }

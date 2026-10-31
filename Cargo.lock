@@ -190,6 +190,30 @@ dependencies = [
 ]
 
 [[package]]
+name = "bullitik-llm"
+version = "0.0.0"
+dependencies = [
+ "anyhow",
+ "libc",
+ "serde",
+ "serde_json",
+ "toml",
+ "ureq",
+ "windows-sys 0.61.2",
+]
+
+[[package]]
+name = "bullitik-voice"
+version = "0.0.0"
+dependencies = [
+ "anyhow",
+ "bullitik-audio",
+ "piper-rs",
+ "whisper-rs",
+ "whisper-rs-sys",
+]
+
+[[package]]
 name = "bumpalo"
 version = "3.20.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1804,17 +1828,24 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d0d5d4b1981b8bbbb7aed204cae5726d683d5d6ac7e74ec54122ea28f315e7c8"
 
 [[package]]
+name = "spike-chaine"
+version = "0.0.0"
+dependencies = [
+ "anyhow",
+ "bullitik-audio",
+ "bullitik-llm",
+ "bullitik-voice",
+ "clap",
+]
+
+[[package]]
 name = "spike-llm"
 version = "0.0.0"
 dependencies = [
  "anyhow",
+ "bullitik-llm",
  "clap",
- "libc",
- "serde",
  "serde_json",
- "toml",
- "ureq",
- "windows-sys 0.61.2",
 ]
 
 [[package]]
@@ -1823,8 +1854,8 @@ version = "0.0.0"
 dependencies = [
  "anyhow",
  "bullitik-audio",
+ "bullitik-voice",
  "clap",
- "whisper-rs",
 ]
 
 [[package]]
@@ -1833,9 +1864,8 @@ version = "0.0.0"
 dependencies = [
  "anyhow",
  "bullitik-audio",
+ "bullitik-voice",
  "clap",
- "piper-rs",
- "whisper-rs",
 ]
 
 [[package]]

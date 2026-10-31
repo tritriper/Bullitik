@@ -10,6 +10,8 @@ ci-dessous y renvoient.
 ## [Non publié]
 
 ### Ajouté
+- Spike 0.4, chaîne complète (#9) : `spike-chaine` enchaîne question de l'intervieweur (LLM), voix (Piper), réponse au micro ou depuis un WAV, transcription (Whisper), relance parlée, puis notation du juge, et mesure la latence de dialogue (fin de la réponse → voix de l'intervieweur) ; rapport dans `docs/spikes/0.4-chaine.md`.
+- Crates `bullitik-voice` (reconnaissance et synthèse vocales) et `bullitik-llm` (llama-server, chat, contenus) : le code des spikes, réutilisable par le jeu ; les spikes 0.1 à 0.3 s'appuient dessus.
 - Spike 0.3, modèle seul (#8) : `spike-llm` lance llama-server (Vulkan) avec Ministral 3 8B, fait poser des questions et une relance par l'intervieweur et noter des réponses annotées par le juge en JSON imposé par un schéma, et mesure temps de réponse et mémoire par appareil ; rapport dans `docs/spikes/0.3-llm.md`.
 - Contenus provisoires du spike 0.3 dans `content/` : prompts de l'intervieweur et du juge, fiche des techniques d'esquive, schéma JSON de la notation, questions, réponses annotées ; leur cohérence est testée.
 - Spike 0.2, synthèse vocale seule (#7) : `spike-tts` lit une question d'intervieweur avec Piper sur CPU, phrase par phrase, pour 4 voix candidates (siwis, upmc-jessica, upmc-pierre, tom), et mesure chargement, délai avant le premier son et temps réel ; rapport dans `docs/spikes/0.2-tts.md`.

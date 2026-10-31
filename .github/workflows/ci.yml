@@ -136,6 +136,8 @@ jobs:
           if ($LASTEXITCODE) { exit $LASTEXITCODE }
           .\spike-llm.exe --help
           if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          .\spike-chaine.exe --help
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
           Remove-Item -Recurse -Force models\files
 
       - uses: actions/upload-artifact@v7

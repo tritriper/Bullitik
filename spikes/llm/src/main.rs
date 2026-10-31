@@ -11,15 +11,10 @@
 //!   cargo run --release -p spike-llm
 //!   cargo run --release -p spike-llm -- --model models/files/Ministral-3-14B-Instruct-2512-Q4_K_M.gguf
 
-mod content;
-mod orphan;
-mod server;
-
 use anyhow::Result;
+use bullitik_llm::{Completion, Content, LlamaServer, Notation};
 use clap::Parser;
-use content::{Content, Notation};
 use serde_json::json;
-use server::{Completion, LlamaServer};
 use std::path::PathBuf;
 use std::time::Duration;
 
@@ -80,10 +75,7 @@ fn main() -> Result<()> {
     println!("\n-- Intervieweur --");
     let mut calls = Vec::new();
     for q in content.questions.iter().take(args.questions) {
-        let messages = [
-            json!({"role": "system", "content": content.interviewer}),
-            json!({"role": "user", "content": format!("Thème : {}. Pose ta question.", q.theme)}),
-        ];
+        let messages = bullitik_llm::interviewer_question(&content, &q.theme);
         let c = server.chat(&messages, 0.7, 120, None)?;
         println!("[{}] {}", q.theme, c.text.trim());
         println!("    (formulation de référence : {})", q.question);
@@ -92,29 +84,23 @@ fn main() -> Result<()> {
     }
     // Mistral exige l'alternance utilisateur / assistant après le prompt système.
     let evasive = content.evasive_example();
-    let messages = [
-        json!({"role": "system", "content": content.interviewer}),
-        json!({"role": "user", "content": "Thème : pouvoir d'achat. Pose ta question."}),
-        json!({"role": "assistant", "content": evasive.question}),
-        json!({"role": "user", "content": format!("Réponse de l'invité : « {} »\nRelance-le.", evasive.reponse)}),
-    ];
+    let messages = bullitik_llm::interviewer_followup(
+        &content,
+        "pouvoir d'achat",
+        &evasive.question,
+        &evasive.reponse,
+    );
     let c = server.chat(&messages, 0.7, 120, None)?;
     println!("[relance] {}", c.text.trim());
     report(&c);
     calls.push(("relance", c));
 
     println!("\n-- Juge --");
-    let format = json!({
-        "type": "json_schema",
-        "json_schema": {"name": "notation", "strict": true, "schema": content.schema},
-    });
+    let format = bullitik_llm::judge_format(&content);
     let mut agreements = 0;
     let mut valid_json = 0;
     for ex in &content.examples {
-        let messages = [
-            json!({"role": "system", "content": content.judge}),
-            json!({"role": "user", "content": format!("Question : {}\nRéponse du joueur : {}", ex.question, ex.reponse)}),
-        ];
+        let messages = bullitik_llm::judge_messages(&content, &ex.question, &ex.reponse);
         let c = server.chat(&messages, 0.1, 600, Some(&format))?;
         // Un JSON invalide (réponse tronquée par max_tokens…) est compté, pas fatal :
         // les mesures déjà prises ne sont pas perdues.

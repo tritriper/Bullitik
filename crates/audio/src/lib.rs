@@ -197,9 +197,21 @@ where
                 b.extend(data.iter().map(|&s| f32::from_sample(s)));
             }
         },
-        |err| eprintln!("micro : {err}"),
+        report_once("micro"),
         None,
     )?)
+}
+
+/// Rappel d'erreur de flux qui n'affiche que la première erreur : un pilote en
+/// difficulté en renvoie une à chaque tampon, ce qui noierait la sortie.
+fn report_once(what: &'static str) -> impl FnMut(cpal::Error) + Send + 'static {
+    let mut shown = false;
+    move |err| {
+        if !shown {
+            eprintln!("{what} : {err} (erreurs suivantes masquées)");
+            shown = true;
+        }
+    }
 }
 
 /// Joue un extrait sur la sortie par défaut et attend la fin de la lecture.
@@ -259,7 +271,7 @@ where
                 let _ = done.send(());
             }
         },
-        |err| eprintln!("sortie audio : {err}"),
+        report_once("sortie audio"),
         None,
     )?)
 }

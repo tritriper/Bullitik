@@ -16,6 +16,9 @@ ci-dessous y renvoient.
 - Spike 0.1, reconnaissance vocale seule (#6) : `spike-stt` transcrit le micro (Entrée pour parler, Entrée pour arrêter) ou un WAV avec whisper.cpp en Vulkan, et mesure latence, temps réel et VRAM ; rapport dans `docs/spikes/0.1-stt.md`.
 - Organisation du dépôt (#2) : git flow `main` / `dev` / branches de travail, backlog numéroté, CHANGELOG, modèles de pull request et d'item de backlog, règles des agents, licence GPL-3.0-or-later.
 
+### Corrigé
+- spike-stt : sur un PC sans pilote Vulkan, le programme avortait au démarrage, même avec `--cpu` (exception C++ de ggml) ; les cartes sont désormais listées par le registre de backends de ggml, qui renvoie une liste vide.
+
 ### CI / build
 - Socle Rust (#3) : workspace Cargo, toolchain 1.99.1 épinglée, `cargo xtask fetch` qui télécharge les modèles et llama.cpp de `models/manifest.toml` et vérifie leur SHA-256, `cargo xtask changelog check|extract`.
 - Devcontainer reproductible (#3) : Ubuntu 24.04 épinglée par digest, paquets apt figés par un snapshot daté, son et affichage de WSLg dans la variante Windows + WSL2, modèles dans un volume Docker.

@@ -43,7 +43,7 @@ fn main() -> Result<()> {
     whisper_rs::install_logging_hooks();
 
     println!("== Spike 0.1 — reconnaissance vocale ==");
-    let gpus = whisper_rs::vulkan::list_devices();
+    let gpus = list_gpus();
     if gpus.is_empty() {
         println!("GPU Vulkan  : aucun");
     }
@@ -52,8 +52,8 @@ fn main() -> Result<()> {
             "GPU Vulkan  : [{}] {} — {} libres sur {}",
             g.id,
             g.name,
-            mib(g.vram.free),
-            mib(g.vram.total)
+            mib(g.free),
+            mib(g.total)
         );
     }
     let use_gpu = !args.cpu && !gpus.is_empty();
@@ -70,7 +70,7 @@ fn main() -> Result<()> {
     );
     println!("Modèle      : {}", args.model.display());
 
-    let free_before = gpus.first().map(|g| g.vram.free);
+    let free_before = gpus.first().map(|g| g.free);
     let t = Instant::now();
     let ctx_params = WhisperContextParameters {
         use_gpu,
@@ -91,7 +91,7 @@ fn main() -> Result<()> {
         ms(t.elapsed())
     );
     if let (true, Some(before)) = (use_gpu, free_before) {
-        let after = whisper_rs::vulkan::list_devices()[0].vram.free;
+        let after = list_gpus()[0].free;
         println!(
             "VRAM prise  : ~{} (mémoire libre avant/après chargement)",
             mib(before.saturating_sub(after))
@@ -148,6 +148,48 @@ fn main() -> Result<()> {
     }
     summary(&runs);
     Ok(())
+}
+
+struct Gpu {
+    id: usize,
+    name: String,
+    free: usize,
+    total: usize,
+}
+
+/// Les cartes graphiques vues par ggml, par son registre de backends : il
+/// rattrape les erreurs d'initialisation de Vulkan (machine sans pilote) et
+/// renvoie alors une liste vide. `whisper_rs::vulkan::list_devices`, lui,
+/// laisse passer une exception C++ qui fait avorter le programme.
+fn list_gpus() -> Vec<Gpu> {
+    use whisper_rs_sys as sys;
+    let mut gpus = Vec::new();
+    // SAFETY : API C de ggml ; les périphériques viennent du registre et vivent
+    // jusqu'à la fin du programme ; la description est une chaîne C de ggml.
+    #[allow(unsafe_code)]
+    unsafe {
+        for i in 0..sys::ggml_backend_dev_count() {
+            let dev = sys::ggml_backend_dev_get(i);
+            let kind = sys::ggml_backend_dev_type(dev);
+            if kind != sys::ggml_backend_dev_type_GGML_BACKEND_DEVICE_TYPE_GPU
+                && kind != sys::ggml_backend_dev_type_GGML_BACKEND_DEVICE_TYPE_IGPU
+            {
+                continue;
+            }
+            let name = std::ffi::CStr::from_ptr(sys::ggml_backend_dev_description(dev))
+                .to_string_lossy()
+                .into_owned();
+            let (mut free, mut total) = (0usize, 0usize);
+            sys::ggml_backend_dev_memory(dev, &mut free, &mut total);
+            gpus.push(Gpu {
+                id: gpus.len(),
+                name,
+                free,
+                total,
+            });
+        }
+    }
+    gpus
 }
 
 struct Run {

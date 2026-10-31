@@ -9,14 +9,14 @@ l'[archive](backlog-archive.md) avec son numéro, et dans le
 **États** : 🧭 décision à prendre · ✅ prêt · 🚧 en cours · ⏳ en attente d'un
 autre item · 🧪 construit, reste à lancer.
 
-**Au 31 octobre 2026** : 2 décisions · 3 à lancer · 2 prêts · 8 en attente.
+**Au 31 octobre 2026** : 2 décisions · 1 en cours · 3 à lancer · 1 prêt · 8 en attente.
 
 ## Lot 0 — Spikes de faisabilité
 
 | ID | Item | État | Fait quand |
 | --- | --- | --- | --- |
 | #2 | Organisation du dépôt : git flow, backlog, CHANGELOG, modèles de PR et d'issue, licence | 🧭 décision | Fusionné dans `dev` (PR #1). Reste : protéger `main` et `dev` (réglage GitHub, voir `contributing.md`). |
-| #5 | CD : livrable portable Windows et Linux à chaque tag `v*` | ✅ prêt | Un tag produit une release GitHub avec le zip et le texte du CHANGELOG. |
+| #5 | CD : livrable portable Windows et Linux à chaque tag `v*` | 🚧 en cours (PR #7) : reste un premier tag pour l'essayer | Un tag produit une release GitHub avec le zip et le texte du CHANGELOG. |
 | #6 | Spike 0.1 — reconnaissance vocale seule, latence mesurée | 🧪 à lancer : fusionné dans `dev`, reste la mesure sur PC AMD et NVIDIA (`mesurer.ps1`) | Je parle, le texte s'affiche ; rapport de latence dans `docs/spikes/`. |
 | #7 | Spike 0.2 — synthèse vocale seule, latence mesurée, choix de la voix | 🧪 à lancer : fusionné dans `dev`, reste la mesure sur PC AMD et NVIDIA (`mesurer.ps1`) | Un texte est lu à voix haute ; rapport de latence et voix retenue. |
 | #8 | Spike 0.3 — modèle seul : intervieweur et juge en JSON, temps et VRAM mesurés | 🧪 à lancer : fusionné dans `dev`, reste la mesure sur PC AMD et NVIDIA (`mesurer.ps1`) | Les deux rôles répondent ; rapport de temps de réponse et de mémoire GPU. |

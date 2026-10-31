@@ -40,7 +40,9 @@ Les sessions cloud de Claude Code imposent leur propre nom de branche
 3. Déplacer les items livrés du [backlog](backlog.md) vers
    l'[archive](backlog-archive.md).
 4. Pull request vers `main`. Après fusion, le responsable du projet tagge :
-   `git tag vx.y.z && git push origin vx.y.z`. La CD produit le livrable.
+   `git tag vx.y.z && git push origin vx.y.z`. La CD (`release.yml`) construit
+   les zips Windows et Linux et publie la release GitHub, avec pour texte la
+   section du CHANGELOG. Un tag avec tiret (`v0.1.0-rc1`) donne une pré-release.
 5. Refusionner `main` dans `dev`.
 
 On suit [SemVer](https://semver.org/lang/fr/) : correctif, fonctionnalité,

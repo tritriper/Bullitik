@@ -3,6 +3,7 @@
 mod changelog;
 mod fetch;
 mod manifest;
+mod package;
 
 use anyhow::{Context, Result, bail};
 use clap::{Parser, Subcommand};
@@ -36,6 +37,18 @@ enum Command {
     },
     /// Vérifie que models/manifest.toml est valide, sans rien télécharger.
     CheckManifest,
+    /// Assemble le dossier portable des spikes (après `cargo build --release --workspace --bins`).
+    Package {
+        /// Dossier de sortie.
+        #[arg(long, default_value = "dist")]
+        out: PathBuf,
+        /// Version (par défaut : BULLITIK_VERSION, sinon « dev »).
+        #[arg(long)]
+        version: Option<String>,
+        /// Produire aussi le zip.
+        #[arg(long)]
+        zip: bool,
+    },
     /// Vérifie ou lit CHANGELOG.md.
     Changelog {
         #[command(subcommand)]
@@ -83,6 +96,20 @@ fn run(cli: Cli) -> Result<()> {
                 m.model.len(),
                 m.runtime.len()
             );
+            Ok(())
+        }
+        Command::Package { out, version, zip } => {
+            let version = version
+                .or_else(|| std::env::var("BULLITIK_VERSION").ok())
+                .unwrap_or_else(|| "dev".into());
+            package::run(
+                &root,
+                &package::Options {
+                    out: &out,
+                    version: &version,
+                    zip,
+                },
+            )?;
             Ok(())
         }
         Command::Changelog { command } => {

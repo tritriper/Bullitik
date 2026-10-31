@@ -24,3 +24,4 @@ ci-dessous y renvoient.
 - `cargo xtask --root` : `xtask.exe` livré hors du dépôt travaille dans le dossier courant.
 - CI : test aller-retour sur CPU (Piper lit une phrase, Whisper small la retranscrit) ; données d'espeak-ng copiées dans l'artefact Windows.
 - Kit de mesure Windows : `mesurer.ps1` (dans l'artefact) relève la machine et lance les trois spikes sur des entrées fixes, rapport Markdown ; la CI vérifie sa syntaxe et lance le dossier livré sur un runner Windows nu (CPU, petits modèles).
+- CD (#5) : `release.yml` publie à chaque tag `v*` une release GitHub avec les dossiers portables des spikes en zip (Windows et Linux), texte tiré du CHANGELOG ; `cargo xtask package` assemble ce dossier, pour la CI comme pour la CD ; SDK Vulkan dans une action partagée.

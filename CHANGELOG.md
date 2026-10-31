@@ -36,6 +36,7 @@ ci-dessous y renvoient.
 - spike-stt : sur un PC sans pilote Vulkan, le programme avortait au démarrage, même avec `--cpu` (exception C++ de ggml) ; les cartes sont désormais listées par le registre de backends de ggml, qui renvoie une liste vide.
 
 ### CI / build
+- CD : le texte d'une pré-version (tag avec tiret, comme `v0.1.0-alpha.1`) reprend la section [Non publié] du CHANGELOG, au lieu d'y renvoyer.
 - Socle Rust (#3) : workspace Cargo, toolchain 1.99.1 épinglée, `cargo xtask fetch` qui télécharge les modèles et llama.cpp de `models/manifest.toml` et vérifie leur SHA-256, `cargo xtask changelog check|extract`.
 - Devcontainer reproductible (#3) : Ubuntu 24.04 épinglée par digest, paquets apt figés par un snapshot daté, son et affichage de WSLg dans la variante Windows + WSL2, modèles dans un volume Docker.
 - CI GitHub Actions (#4) : à chaque push, format, lint et tests dans l'image du devcontainer sous Linux, et sur un runner Windows.

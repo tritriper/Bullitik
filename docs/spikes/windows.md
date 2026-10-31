@@ -4,6 +4,30 @@ Ce dossier vient de l'artefact `bullitik-spikes-windows` de la CI GitHub
 (onglet *Actions*, une exécution, en bas de la page). Il sert à mesurer les
 spikes sur un vrai PC Windows, avec sa carte graphique AMD ou NVIDIA.
 
+## Récupérer le dossier
+
+Sur GitHub, onglet *Actions*, dernière exécution réussie de la CI sur `dev`,
+artefact **bullitik-spikes-windows** en bas de la page (il faut être connecté).
+En ligne de commande, avec [GitHub CLI](https://cli.github.com/) :
+
+```powershell
+gh run download --repo tritriper/Bullitik --branch dev --name bullitik-spikes-windows --dir bullitik-spikes
+```
+
+## Mesurer en une commande
+
+```powershell
+cd bullitik-spikes
+powershell -ExecutionPolicy Bypass -File .\mesurer.ps1
+```
+
+Le script relève la machine (cartes graphiques, pilotes, processeur, mémoire),
+télécharge les modèles s'il le faut, lance les trois spikes sur des entrées
+fixes (sans micro ni écoute), et écrit tout dans `mesures-<PC>-<date>.md`.
+Options : `-Avec14B` mesure aussi Ministral 3 14B, `-Cpu` ajoute les mesures
+sur processeur pour comparer. Ce rapport suffit pour remplir les rapports des
+spikes ; les commandes ci-dessous servent à essayer à la main, au micro.
+
 ## Une fois : télécharger les modèles
 
 Dans un terminal PowerShell ouvert dans ce dossier :

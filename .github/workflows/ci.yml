@@ -149,6 +149,32 @@ jobs:
           if (-not $espeak) { throw "espeak-ng-data introuvable dans $env:CARGO_TARGET_DIR\release\build" }
           Copy-Item -Recurse $espeak "$d\espeak-ng-data"
           if (Test-Path content) { Copy-Item -Recurse content $d }
+          New-Item -ItemType Directory -Force "$d\testdata" | Out-Null
+          Copy-Item spikes\stt\testdata\phrase.wav "$d\testdata"
+          Copy-Item scripts\mesurer-spikes.ps1 "$d\mesurer.ps1"
+
+      - name: Syntaxe du script de mesure
+        shell: pwsh
+        run: |
+          $errors = $null
+          [void][System.Management.Automation.Language.Parser]::ParseFile("$PWD\scripts\mesurer-spikes.ps1", [ref]$null, [ref]$errors)
+          if ($errors) { $errors | ForEach-Object { Write-Error $_.Message }; exit 1 }
+
+      # Le dossier livré tourne-t-il sur un Windows nu ? Sans GPU : sur CPU, avec
+      # les petits modèles de l'ensemble ci.
+      - name: Essai du dossier des spikes sur le runner
+        shell: pwsh
+        working-directory: bullitik-spikes-windows
+        run: |
+          .\xtask.exe fetch --set ci
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          .\spike-stt.exe --cpu --model models\files\ggml-small-q5_1.bin --wav testdata\phrase.wav --repeat 1
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          .\spike-tts.exe --voice siwis --no-play --repeat 1
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          .\spike-llm.exe --help
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          Remove-Item -Recurse -Force models\files
 
       - uses: actions/upload-artifact@v7
         with:

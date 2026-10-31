@@ -23,3 +23,4 @@ ci-dessous y renvoient.
 - CI : test de transcription d'une phrase française (Whisper small sur CPU) et artefact `bullitik-spikes-windows` (exécutables des spikes, `xtask.exe`, manifeste) pour mesurer sur un PC Windows ; SDK Vulkan 1.4.363.0 épinglé par SHA-256.
 - `cargo xtask --root` : `xtask.exe` livré hors du dépôt travaille dans le dossier courant.
 - CI : test aller-retour sur CPU (Piper lit une phrase, Whisper small la retranscrit) ; données d'espeak-ng copiées dans l'artefact Windows.
+- Kit de mesure Windows : `mesurer.ps1` (dans l'artefact) relève la machine et lance les trois spikes sur des entrées fixes, rapport Markdown ; la CI vérifie sa syntaxe et lance le dossier livré sur un runner Windows nu (CPU, petits modèles).

@@ -10,3 +10,5 @@ reste à faire est dans le [backlog](backlog.md).
 | ID | Ce qui a été livré | Version |
 | --- | --- | --- |
 | #1 | Stack technique validée : Rust, whisper.cpp, Piper, llama.cpp et Ministral 3 8B en Vulkan (AMD et NVIDIA), Tauri provisoire, livrable Windows et Linux, GPL-3.0-or-later | non publiée |
+| #3 | Devcontainer reproductible : Ubuntu 24.04 et apt épinglés, toolchain Rust, Vulkan (lavapipe), son et affichage de WSLg, modèles dans un volume | non publiée |
+| #4 | CI GitHub Actions : Linux dans l'image du devcontainer, Windows avec SDK Vulkan, artefact des spikes | non publiée |

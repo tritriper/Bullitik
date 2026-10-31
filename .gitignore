@@ -6,6 +6,9 @@
 /runtime/
 /dist/
 
+# Build Rust.
+/target/
+
 # Enregistrements et journaux locaux des spikes.
 /spikes/**/out/
 

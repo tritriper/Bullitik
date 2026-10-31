@@ -9,3 +9,4 @@ reste à faire est dans le [backlog](backlog.md).
 
 | ID | Ce qui a été livré | Version |
 | --- | --- | --- |
+| #1 | Stack technique validée : Rust, whisper.cpp, Piper, llama.cpp et Ministral 3 8B en Vulkan (AMD et NVIDIA), Tauri provisoire, livrable Windows et Linux, GPL-3.0-or-later | non publiée |

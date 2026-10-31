@@ -1,0 +1,26 @@
+// Devcontainer générique : compiler et tester, sur n'importe quel hôte Docker.
+// Sous Windows + WSL2, préférer « Bullitik (Windows + WSL2) » (wsl/), qui
+// branche en plus le son et l'affichage de WSLg. Voir docs/dev/setup.md.
+{
+  "name": "Bullitik",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "remoteUser": "ubuntu",
+  "mounts": [
+    // Les modèles (6 Go) survivent à la reconstruction du conteneur.
+    "source=bullitik-models,target=${containerWorkspaceFolder}/models/files,type=volume",
+    "source=bullitik-cargo-registry,target=/home/ubuntu/.cargo/registry,type=volume"
+  ],
+  "postCreateCommand": "sudo chown ubuntu: models/files /home/ubuntu/.cargo/registry && cargo xtask fetch",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "rust-lang.rust-analyzer",
+        "tamasfe.even-better-toml",
+        "vadimcn.vscode-lldb"
+      ]
+    }
+  }
+}

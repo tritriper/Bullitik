@@ -9,7 +9,7 @@ l'[archive](backlog-archive.md) avec son numéro, et dans le
 **États** : 🧭 décision à prendre · ✅ prêt · 🚧 en cours · ⏳ en attente d'un
 autre item · 🧪 construit, reste à lancer.
 
-**Au 31 octobre 2026** : 2 décisions · 2 en cours · 3 à lancer · 2 prêts · 8 en attente.
+**Au 31 octobre 2026** : 2 décisions · 3 en cours · 3 à lancer · 2 prêts · 7 en attente.
 
 ## Lot 0 — Spikes de faisabilité
 
@@ -29,7 +29,7 @@ autre item · 🧪 construit, reste à lancer.
 
 | ID | Item | État | Fait quand |
 | --- | --- | --- | --- |
-| #10 | État de l'art : Bull, Bavelas, Rogers et Norton, évasion en interview politique | ⏳ lot 0 | Synthèse sourcée dans `docs/`. |
+| #10 | État de l'art : Bull, Bavelas, Rogers et Norton, évasion en interview politique | 🚧 en cours (PR #10) : reste la validation de la typologie proposée | Synthèse sourcée dans `docs/recherche/etat-de-l-art.md`. |
 | #11 | Typologie des techniques d'esquive retenue, avec définition et exemple | ⏳ #10 | Fiche dans `content/juge/`. |
 | #12 | Règles du juge : prompt système, critères, schéma JSON de sortie | ⏳ #11 | Prompt et schéma dans `content/`, validés par un test. |
 | #13 | Jeu d'exemples annotés pour calibrer le juge | ⏳ #12 | Le juge retrouve la note attendue sur la majorité des exemples. |

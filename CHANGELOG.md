@@ -10,6 +10,7 @@ ci-dessous y renvoient.
 ## [Non publié]
 
 ### Ajouté
+- État de l'art sur l'art de répondre sans répondre (#10) : Bull, Bavelas, Rogers et Norton, Clayman, corpus et LLM juges récents (CLARITY, EvasionBench), langue de bois ; typologie proposée de 11 techniques avec règles de départage et critères de discrétion, dans `docs/recherche/etat-de-l-art.md`.
 - Spike 0.4, chaîne complète (#9) : `spike-chaine` enchaîne question de l'intervieweur (LLM), voix (Piper), réponse au micro ou depuis un WAV, transcription (Whisper), relance parlée, puis notation du juge, et mesure la latence de dialogue (fin de la réponse → voix de l'intervieweur) ; rapport dans `docs/spikes/0.4-chaine.md`.
 - Crates `bullitik-voice` (reconnaissance et synthèse vocales) et `bullitik-llm` (llama-server, chat, contenus) : le code des spikes, réutilisable par le jeu ; les spikes 0.1 à 0.3 s'appuient dessus.
 - Spike 0.3, modèle seul (#8) : `spike-llm` lance llama-server (Vulkan) avec Ministral 3 8B, fait poser des questions et une relance par l'intervieweur et noter des réponses annotées par le juge en JSON imposé par un schéma, et mesure temps de réponse et mémoire par appareil ; rapport dans `docs/spikes/0.3-llm.md`.

@@ -10,6 +10,7 @@ ci-dessous y renvoient.
 ## [Non publié]
 
 ### Ajouté
+- Voix de l'intervieweur retenues (#7) : upmc-jessica et upmc-pierre, au choix du joueur.
 - Mesures des spikes 0.1 à 0.4 sur un PC Windows avec une Radeon RX 7800 XT : latence de dialogue 3,0 s, dont 2,0 s de transcription ; question 0,8 s, juge 2,4 s, 6,7 Go de VRAM ; rapports dans `docs/spikes/`.
 - État de l'art sur l'art de répondre sans répondre (#10) : Bull, Bavelas, Rogers et Norton, Clayman, corpus et LLM juges récents (CLARITY, EvasionBench), langue de bois ; typologie proposée de 11 techniques avec règles de départage et critères de discrétion, dans `docs/recherche/etat-de-l-art.md`.
 - Spike 0.4, chaîne complète (#9) : `spike-chaine` enchaîne question de l'intervieweur (LLM), voix (Piper), réponse au micro ou depuis un WAV, transcription (Whisper), relance parlée, puis notation du juge, et mesure la latence de dialogue (fin de la réponse → voix de l'intervieweur) ; rapport dans `docs/spikes/0.4-chaine.md`.

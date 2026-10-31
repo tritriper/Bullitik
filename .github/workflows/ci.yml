@@ -165,6 +165,9 @@ jobs:
       - name: Essai du dossier des spikes sur le runner
         shell: pwsh
         working-directory: bullitik-spikes-windows
+        env:
+          # Journaux de whisper.cpp et de llama.cpp visibles en cas d'échec.
+          BULLITIK_LOG: "1"
         run: |
           .\xtask.exe fetch --set ci
           if ($LASTEXITCODE) { exit $LASTEXITCODE }

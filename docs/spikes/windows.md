@@ -61,6 +61,8 @@ Chaque spike affiche la carte graphique utilisée, ses mesures, puis un résumé
 - **« VCRUNTIME140.dll introuvable »** : installer le
   [Visual C++ Redistributable](https://learn.microsoft.com/cpp/windows/latest-supported-vc-redist)
   x64 de Microsoft.
+- **Toute autre erreur** : relancer avec `$env:BULLITIK_LOG = "1"` avant la
+  commande ; whisper.cpp affiche alors son journal détaillé.
 - **« GPU Vulkan : aucun »** : mettre à jour le pilote de la carte graphique
   (AMD Adrenalin ou NVIDIA Game Ready).
 - **Pas de micro** : vérifier le micro par défaut dans *Paramètres → Système →

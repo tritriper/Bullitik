@@ -1,0 +1,19 @@
+[package]
+name = "spike-tts"
+description = "Spike 0.2 : synthèse vocale seule (Piper), latence mesurée, choix de la voix."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+anyhow = "1"
+bullitik-audio = { path = "../../crates/audio" }
+clap = { version = "4", features = ["derive"] }
+piper-rs = "0.2"
+
+[lints]
+workspace = true
+
+[dev-dependencies]
+whisper-rs = { version = "0.16", features = ["vulkan"] }

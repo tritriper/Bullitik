@@ -134,6 +134,14 @@ jobs:
           Copy-Item target\release\spike-*.exe, target\release\xtask.exe $d
           Copy-Item models\manifest.toml "$d\models"
           Copy-Item docs\spikes\windows.md "$d\LISEZMOI.md"
+          # Données de phonétisation d'espeak-ng (Piper), générées au build.
+          $espeak = Get-ChildItem target\release\build -Directory -Filter "espeak-rs-sys-*" |
+            ForEach-Object { Join-Path $_.FullName "out\share\espeak-ng-data" } |
+            Where-Object { Test-Path $_ } |
+            Sort-Object { (Get-Item $_).LastWriteTime } |
+            Select-Object -Last 1
+          if (-not $espeak) { throw "espeak-ng-data introuvable dans target\release\build" }
+          Copy-Item -Recurse $espeak "$d\espeak-ng-data"
           if (Test-Path content) { Copy-Item -Recurse content $d }
 
       - uses: actions/upload-artifact@v7

@@ -22,6 +22,8 @@ SHA-256. Relancer la commande ne retélécharge rien.
 | 0.1 Reconnaissance vocale, au micro | `.\spike-stt.exe` |
 | 0.1 Sur un fichier, 5 mesures | `.\spike-stt.exe --wav essai.wav --repeat 5` |
 | 0.1 Forcer le CPU, pour comparer | `.\spike-stt.exe --cpu` |
+| 0.2 Synthèse vocale, les 4 voix l'une après l'autre | `.\spike-tts.exe` |
+| 0.2 Une voix, un texte | `.\spike-tts.exe --voice upmc-pierre --text "Bonsoir."` |
 
 Chaque spike affiche la carte graphique utilisée, ses mesures, puis un résumé
 à recopier dans le rapport du spike (`docs/spikes/` dans le dépôt).

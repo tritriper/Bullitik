@@ -10,6 +10,7 @@ ci-dessous y renvoient.
 ## [Non publié]
 
 ### Ajouté
+- Spike 0.2, synthèse vocale seule (#7) : `spike-tts` lit une question d'intervieweur avec Piper sur CPU, phrase par phrase, pour 4 voix candidates (siwis, upmc-jessica, upmc-pierre, tom), et mesure chargement, délai avant le premier son et temps réel ; rapport dans `docs/spikes/0.2-tts.md`.
 - Spike 0.1, reconnaissance vocale seule (#6) : `spike-stt` transcrit le micro (Entrée pour parler, Entrée pour arrêter) ou un WAV avec whisper.cpp en Vulkan, et mesure latence, temps réel et VRAM ; rapport dans `docs/spikes/0.1-stt.md`.
 - Organisation du dépôt (#2) : git flow `main` / `dev` / branches de travail, backlog numéroté, CHANGELOG, modèles de pull request et d'item de backlog, règles des agents, licence GPL-3.0-or-later.
 
@@ -19,3 +20,4 @@ ci-dessous y renvoient.
 - CI GitHub Actions (#4) : à chaque push, format, lint et tests dans l'image du devcontainer sous Linux, et sur un runner Windows.
 - CI : test de transcription d'une phrase française (Whisper small sur CPU) et artefact `bullitik-spikes-windows` (exécutables des spikes, `xtask.exe`, manifeste) pour mesurer sur un PC Windows ; SDK Vulkan 1.4.363.0 épinglé par SHA-256.
 - `cargo xtask --root` : `xtask.exe` livré hors du dépôt travaille dans le dossier courant.
+- CI : test aller-retour sur CPU (Piper lit une phrase, Whisper small la retranscrit) ; données d'espeak-ng copiées dans l'artefact Windows.

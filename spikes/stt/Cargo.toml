@@ -1,0 +1,16 @@
+[package]
+name = "spike-stt"
+description = "Spike 0.1 : reconnaissance vocale seule (whisper.cpp, Vulkan), latence mesurée."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+anyhow = "1"
+bullitik-audio = { path = "../../crates/audio" }
+clap = { version = "4", features = ["derive"] }
+whisper-rs = { version = "0.16", features = ["vulkan"] }
+
+[lints]
+workspace = true

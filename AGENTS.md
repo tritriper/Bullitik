@@ -53,7 +53,8 @@ Si ces documents deviennent inaccessibles, en tenir une copie à jour dans
 - **Tout ce qui se télécharge** (modèle, binaire tiers) est déclaré dans
   `models/manifest.toml` avec son URL figée, sa taille, son SHA-256 et sa
   licence, puis récupéré par `cargo xtask fetch`. Jamais de téléchargement
-  ad hoc dans un script ou dans le code.
+  ad hoc dans un script ou dans le code. Les outils de la CI (SDK Vulkan…)
+  sont épinglés dans le workflow, avec leur SHA-256.
 - Les mesures de performance (latence, VRAM) se font sur Windows natif, avec
   les exécutables produits par la CI, jamais dans le conteneur.
 

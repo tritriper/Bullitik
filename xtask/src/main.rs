@@ -12,6 +12,10 @@ use std::process::ExitCode;
 #[derive(Parser)]
 #[command(name = "cargo xtask", about = "Tâches du projet Bullitik")]
 struct Cli {
+    /// Dossier de travail (celui qui contient models/manifest.toml). Par défaut :
+    /// le dépôt, ou le dossier courant pour un xtask.exe livré hors du dépôt.
+    #[arg(long, global = true)]
+    root: Option<PathBuf>,
     #[command(subcommand)]
     command: Command,
 }
@@ -58,7 +62,7 @@ fn main() -> ExitCode {
 }
 
 fn run(cli: Cli) -> Result<()> {
-    let root = workspace_root();
+    let root = cli.root.clone().unwrap_or_else(default_root);
     match cli.command {
         Command::Fetch { set, with, dry_run } => {
             let manifest = load_manifest(&root)?;
@@ -118,10 +122,17 @@ fn load_manifest(root: &Path) -> Result<manifest::Manifest> {
     manifest::Manifest::parse(&text).with_context(|| path.display().to_string())
 }
 
-/// La racine du dépôt : le dossier parent de `xtask/`.
-fn workspace_root() -> PathBuf {
-    Path::new(env!("CARGO_MANIFEST_DIR"))
+/// La racine du dépôt (le dossier parent de `xtask/`) si elle existe sur cette
+/// machine, sinon le dossier courant : c'est le cas de `xtask.exe` livré avec
+/// les exécutables des spikes.
+fn default_root() -> PathBuf {
+    let repo = Path::new(env!("CARGO_MANIFEST_DIR"))
         .parent()
-        .expect("xtask vit dans un sous-dossier du dépôt")
-        .to_path_buf()
+        .map(Path::to_path_buf)
+        .unwrap_or_default();
+    if repo.join("models").join("manifest.toml").is_file() {
+        repo
+    } else {
+        PathBuf::from(".")
+    }
 }

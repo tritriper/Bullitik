@@ -19,9 +19,11 @@ ARG UBUNTU_SNAPSHOT=20261030T000000Z
 # - son : ALSA pour cpal, redirigé vers PulseAudio (WSLg) par /etc/asound.conf.
 #
 # L'archive snapshot est en HTTPS : on installe d'abord les certificats depuis
-# l'archive courante, puis toutes les sources pointent vers le snapshot daté.
+# l'archive courante, dans la version figée de la publication de noble
+# (20240203), puis toutes les sources pointent vers le snapshot daté, qui les
+# met à jour vers sa propre version : le résultat ne dépend pas du jour du build.
 RUN apt-get update \
- && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends ca-certificates \
+ && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends ca-certificates=20240203 \
  && sed -i "s#^URIs: http://\(archive\|security\)\.ubuntu\.com/ubuntu/\?\$#URIs: https://snapshot.ubuntu.com/ubuntu/${UBUNTU_SNAPSHOT}/#" \
       /etc/apt/sources.list.d/ubuntu.sources \
  && apt-get update \

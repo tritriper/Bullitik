@@ -3,9 +3,10 @@
 #   linux    construit l'image du devcontainer (cache GitHub) et lance dedans
 #            format, lint, tests, manifeste et CHANGELOG : la CI vérifie
 #            exactement l'environnement de développement.
-#   windows  même lint et mêmes tests sur un runner Windows natif, puis les
-#            exécutables des spikes, publiés en artefact
-#            « bullitik-spikes-windows » pour les mesures sur un PC Windows.
+#   windows  lint et tests unitaires sur un runner Windows natif, puis le
+#            dossier des spikes (xtask package), essayé sur le runner (CPU,
+#            petits modèles) et publié en artefact « bullitik-spikes-windows »
+#            pour les mesures sur un PC Windows.
 #
 # Les pull requests venues d'un fork lancent aussi la CI (un push sur ce dépôt
 # la lance déjà pour ses propres branches : pas de double exécution).
@@ -32,6 +33,7 @@ jobs:
     name: Linux (devcontainer)
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ubuntu-24.04
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v7
 
@@ -87,6 +89,7 @@ jobs:
     name: Windows
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: windows-2025
+    timeout-minutes: 120
     env:
       # Dossier de build court : whisper.cpp génère des chemins si profonds
       # sous target\ qu'ils dépassent la limite Windows de 260 caractères.

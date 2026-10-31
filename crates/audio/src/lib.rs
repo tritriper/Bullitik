@@ -22,6 +22,9 @@ pub struct Clip {
 
 impl Clip {
     pub fn duration(&self) -> Duration {
+        if self.rate == 0 {
+            return Duration::ZERO;
+        }
         Duration::from_secs_f64(self.samples.len() as f64 / f64::from(self.rate))
     }
 
@@ -51,6 +54,9 @@ pub fn to_mono(interleaved: &[f32], channels: usize) -> Vec<f32> {
 pub fn resample(input: &[f32], from: u32, to: u32) -> Vec<f32> {
     if from == to || input.is_empty() {
         return input.to_vec();
+    }
+    if from == 0 || to == 0 {
+        return Vec::new();
     }
     let ratio = f64::from(to) / f64::from(from);
     // Fréquence de coupure, relative à la fréquence de Nyquist de l'entrée.
@@ -93,6 +99,11 @@ pub fn read_wav(path: &Path) -> Result<Clip> {
     let mut reader =
         hound::WavReader::open(path).with_context(|| format!("lecture de {}", path.display()))?;
     let spec = reader.spec();
+    anyhow::ensure!(
+        spec.sample_rate > 0,
+        "{} : fréquence d'échantillonnage nulle",
+        path.display()
+    );
     let interleaved: Vec<f32> = match spec.sample_format {
         hound::SampleFormat::Float => reader.samples::<f32>().collect::<Result<_, _>>()?,
         hound::SampleFormat::Int => {
@@ -201,7 +212,13 @@ pub fn play(clip: &Clip) -> Result<()> {
         .context("configuration de la sortie audio illisible")?;
     let format = supported.sample_format();
     let config: cpal::StreamConfig = supported.into();
-    let samples = clip.resampled(config.sample_rate).samples;
+    let mut samples = clip.resampled(config.sample_rate).samples;
+    // Silence de garde : « fini » veut dire « dernier échantillon envoyé », pas
+    // « joué » ; sans cette marge, la fin peut rester dans le tampon de la carte.
+    samples.extend(std::iter::repeat_n(
+        0.0,
+        config.sample_rate as usize * 3 / 10,
+    ));
     let (done_tx, done_rx) = mpsc::channel();
 
     let stream = match format {
@@ -299,6 +316,20 @@ mod tests {
             rms(&out[500..7500]) < 0.02,
             "repliement : {}",
             rms(&out[500..7500])
+        );
+    }
+
+    #[test]
+    fn frequence_nulle_sans_panique() {
+        assert!(resample(&[0.1, 0.2], 0, 16_000).is_empty());
+        assert!(resample(&[0.1, 0.2], 16_000, 0).is_empty());
+        assert_eq!(
+            Clip {
+                samples: vec![0.0; 10],
+                rate: 0
+            }
+            .duration(),
+            Duration::ZERO
         );
     }
 

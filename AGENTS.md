@@ -54,7 +54,10 @@ Si ces documents deviennent inaccessibles, en tenir une copie à jour dans
   `models/manifest.toml` avec son URL figée, sa taille, son SHA-256 et sa
   licence, puis récupéré par `cargo xtask fetch`. Jamais de téléchargement
   ad hoc dans un script ou dans le code. Les outils de la CI (SDK Vulkan…)
-  sont épinglés dans le workflow, avec leur SHA-256.
+  sont épinglés dans le workflow, avec leur SHA-256. Seule exception, connue :
+  la crate `ort-sys` télécharge onnxruntime pendant la compilation (version et
+  empreinte épinglées par la crate elle-même) ; un build hors ligne n'est donc
+  pas encore possible.
 - Les mesures de performance (latence, VRAM) se font sur Windows natif, avec
   les exécutables produits par la CI, jamais dans le conteneur.
 

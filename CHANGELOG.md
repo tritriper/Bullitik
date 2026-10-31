@@ -17,6 +17,14 @@ ci-dessous y renvoient.
 - Organisation du dépôt (#2) : git flow `main` / `dev` / branches de travail, backlog numéroté, CHANGELOG, modèles de pull request et d'item de backlog, règles des agents, licence GPL-3.0-or-later.
 
 ### Corrigé
+- spike-llm : les requêtes vers llama-server (127.0.0.1) ne passent plus par un proxy défini dans l'environnement ; sinon le spike attendait 10 min puis échouait.
+- spike-llm : llama-server est tué avec le spike même en cas d'arrêt brutal (Job Object sous Windows, PR_SET_PDEATHSIG sous Linux), au lieu de garder des Go de VRAM.
+- spike-llm : un JSON invalide ou tronqué du juge est compté (« JSON valide n/4 ») au lieu d'arrêter le spike ; explication bornée à 400 caractères, `finish_reason` lu.
+- spike-llm : la relance utilise le premier exemple annoté comme esquive, plus le deuxième du fichier ; variables inconnues refusées dans les deux prompts.
+- xtask fetch : téléchargement repris là où il s'est arrêté (requête `Range`), 10 essais, délai par essai ; un serveur figé ne bloque plus sans fin.
+- xtask fetch : un runtime dont l'exécutable a disparu est réextrait ; noms de fichiers du manifeste limités à une liste blanche sûre sous Windows.
+- spike-stt : la fin de l'entrée (Ctrl-D, Ctrl-Z) termine la boucle au lieu de tourner sans fin.
+- spike-tts : un texte vide est refusé proprement au lieu de paniquer ; audio : WAV à 0 Hz refusé, fin du son protégée par un silence de garde.
 - xtask : lancé dans un dossier qui contient `models/manifest.toml`, il travaille dans ce dossier, même si le dépôt où il a été compilé existe sur la machine (sur le runner Windows, les modèles partaient dans le dépôt au lieu du dossier livré).
 - spike-stt : sur un PC sans pilote Vulkan, le programme avortait au démarrage, même avec `--cpu` (exception C++ de ggml) ; les cartes sont désormais listées par le registre de backends de ggml, qui renvoie une liste vide.
 
@@ -29,3 +37,4 @@ ci-dessous y renvoient.
 - CI : test aller-retour sur CPU (Piper lit une phrase, Whisper small la retranscrit) ; données d'espeak-ng copiées dans l'artefact Windows.
 - Kit de mesure Windows : `mesurer.ps1` (dans l'artefact) relève la machine et lance les trois spikes sur des entrées fixes, rapport Markdown ; la CI vérifie sa syntaxe et lance le dossier livré sur un runner Windows nu (CPU, petits modèles).
 - CD (#5) : `release.yml` publie à chaque tag `v*` une release GitHub avec les dossiers portables des spikes en zip (Windows et Linux), texte tiré du CHANGELOG ; `cargo xtask package` assemble ce dossier, pour la CI comme pour la CD ; SDK Vulkan dans une action partagée.
+- CI : délais maximum par job, code de sortie de l'installeur du SDK Vulkan vérifié, `ca-certificates` de l'image figé avant le passage au snapshot.

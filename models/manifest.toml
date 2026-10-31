@@ -3,7 +3,8 @@
 # `cargo xtask fetch` lit ce fichier, télécharge chaque élément de l'ensemble
 # demandé, vérifie sa taille et son SHA-256, puis le range :
 #   - un modèle   → models/files/<file>
-#   - un runtime  → runtime/<name>/ (archive extraite)
+#   - un runtime  → runtime/<name>/ (archive extraite), dont `bin` est
+#                   l'exécutable attendu (vérifié à chaque fetch)
 #
 # Les URL pointent vers un commit précis (Hugging Face) ou une build précise
 # (llama.cpp) : changer de version, c'est changer l'URL ET le SHA-256 ici.
@@ -116,6 +117,7 @@ sets = ["dev"]
 [[runtime]]
 name = "llama.cpp"
 os = "linux"
+bin = "llama-server"
 url = "https://github.com/ggml-org/llama.cpp/releases/download/b11960/llama-b11960-bin-ubuntu-vulkan-x64.tar.gz"
 size = 35474467
 sha256 = "164199e978304bb32a8a6c24b8efa015528ddf286821596eab676c90b375feac"
@@ -125,6 +127,7 @@ sets = ["dev"]
 [[runtime]]
 name = "llama.cpp"
 os = "windows"
+bin = "llama-server"
 url = "https://github.com/ggml-org/llama.cpp/releases/download/b11960/llama-b11960-bin-win-vulkan-x64.zip"
 size = 37345851
 sha256 = "bac6914b5e83523eb008c6789eaa12669f93fbc196c3b9e8237b6672323b33e9"

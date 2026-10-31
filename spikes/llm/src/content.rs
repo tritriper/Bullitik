@@ -107,6 +107,16 @@ impl Content {
             !self.judge.contains("{{"),
             "prompt du juge : variable non remplacée"
         );
+        ensure!(
+            !self.interviewer.contains("{{"),
+            "prompt de l'intervieweur : variable inconnue"
+        );
+        ensure!(
+            self.examples
+                .iter()
+                .any(|e| e.attendu.a_repondu == Some(false)),
+            "il faut au moins un exemple annoté comme esquive (a_repondu = false)"
+        );
         ensure!(!self.questions.is_empty(), "aucune question");
         ensure!(self.examples.len() >= 2, "il faut au moins deux exemples");
         let techniques = self.techniques();
@@ -127,6 +137,14 @@ impl Content {
             }
         }
         Ok(())
+    }
+
+    /// Le premier exemple annoté comme esquive, pour la relance de l'intervieweur.
+    pub fn evasive_example(&self) -> &Example {
+        self.examples
+            .iter()
+            .find(|e| e.attendu.a_repondu == Some(false))
+            .expect("vérifié au chargement")
     }
 
     pub fn techniques(&self) -> Vec<String> {

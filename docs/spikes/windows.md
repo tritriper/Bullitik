@@ -61,6 +61,10 @@ Chaque spike affiche la carte graphique utilisée, ses mesures, puis un résumé
 - **« VCRUNTIME140.dll introuvable »** : installer le
   [Visual C++ Redistributable](https://learn.microsoft.com/cpp/windows/latest-supported-vc-redist)
   x64 de Microsoft.
+- **« vulkan-1.dll introuvable »**, l'exécutable ne démarre pas du tout, même
+  avec `--cpu` : le chargeur Vulkan vient du pilote de la carte graphique ;
+  installer ou réparer le pilote AMD ou NVIDIA (ou, sur une machine sans GPU,
+  le *Vulkan Runtime* de LunarG).
 - **Toute autre erreur** : relancer avec `$env:BULLITIK_LOG = "1"` avant la
   commande ; whisper.cpp affiche alors son journal détaillé.
 - **« GPU Vulkan : aucun »** : mettre à jour le pilote de la carte graphique

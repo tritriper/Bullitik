@@ -26,6 +26,8 @@ pub struct Completion {
     pub prompt_time: Duration,
     pub gen_tokens: u64,
     pub gen_tps: f64,
+    /// « stop » si le modèle a fini, « length » si max_tokens l'a coupé.
+    pub finish_reason: String,
 }
 
 #[derive(Deserialize)]
@@ -37,6 +39,7 @@ struct ChatResponse {
 #[derive(Deserialize)]
 struct Choice {
     message: Message,
+    finish_reason: Option<String>,
 }
 
 #[derive(Deserialize)]
@@ -98,10 +101,13 @@ impl LlamaServer {
         } else {
             cmd.args(["--n-gpu-layers", "all"]);
         }
+        crate::orphan::configure(&mut cmd);
         let t = Instant::now();
         let child = cmd
             .spawn()
             .with_context(|| format!("lancement de {}", exe.display()))?;
+        // Sans cela, un spike tué brutalement laisserait llama-server en vie.
+        crate::orphan::attach(&child).context("rattachement de llama-server au spike")?;
         let mut server = Self::with_child(Some(child), port, Some(log.to_path_buf()));
         server.wait_ready(Duration::from_secs(600))?;
         server.startup = t.elapsed();
@@ -110,6 +116,8 @@ impl LlamaServer {
 
     fn with_child(child: Option<Child>, port: u16, log: Option<PathBuf>) -> Self {
         let agent = ureq::Agent::config_builder()
+            // Jamais de proxy vers 127.0.0.1, même si HTTPS_PROXY est défini.
+            .proxy(None)
             .timeout_global(Some(Duration::from_secs(900)))
             .http_status_as_error(false)
             .build()
@@ -181,13 +189,13 @@ impl LlamaServer {
         ensure!(status == 200, "llama-server a répondu {status} : {text}");
         let parsed: ChatResponse =
             serde_json::from_str(&text).context("réponse de llama-server illisible")?;
-        let content = parsed
+        let choice = parsed
             .choices
             .into_iter()
             .next()
-            .context("réponse sans choix")?
-            .message
-            .content;
+            .context("réponse sans choix")?;
+        let finish_reason = choice.finish_reason.unwrap_or_default();
+        let content = choice.message.content;
         let timings = parsed.timings;
         Ok(Completion {
             text: content,
@@ -198,6 +206,7 @@ impl LlamaServer {
             }),
             gen_tokens: timings.as_ref().map_or(0, |t| t.predicted_n),
             gen_tps: timings.as_ref().map_or(0.0, |t| t.predicted_per_second),
+            finish_reason,
         })
     }
 
@@ -341,7 +350,7 @@ mod tests {
             reader.read_exact(&mut body).unwrap();
             let request: Value = serde_json::from_slice(&body).unwrap();
             let reply = json!({
-                "choices": [{"message": {"role": "assistant", "content": "{\"a_repondu\":false}"}}],
+                "choices": [{"message": {"role": "assistant", "content": "{\"a_repondu\":false}"}, "finish_reason": "stop"}],
                 "timings": {"prompt_n": 42, "prompt_ms": 120.0, "predicted_n": 7, "predicted_ms": 70.0, "predicted_per_second": 100.0}
             })
             .to_string();
@@ -365,5 +374,6 @@ mod tests {
         assert_eq!(c.prompt_tokens, 42);
         assert_eq!(c.prompt_time, Duration::from_millis(120));
         assert_eq!(c.gen_tokens, 7);
+        assert_eq!(c.finish_reason, "stop");
     }
 }

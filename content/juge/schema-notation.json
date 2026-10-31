@@ -19,7 +19,7 @@
         "langue de bois"
       ]
     },
-    "explication": { "type": "string" }
+    "explication": { "type": "string", "maxLength": 400 }
   },
   "required": ["a_repondu", "pertinence", "discretion", "technique", "explication"],
   "additionalProperties": false

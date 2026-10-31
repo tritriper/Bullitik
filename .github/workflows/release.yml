@@ -80,7 +80,9 @@ jobs:
               cargo build --release --locked --workspace --bins
               cargo xtask package --out dist --zip
               cargo xtask changelog extract '$version' > dist/notes.md \
-                || echo 'Pré-version $version : voir CHANGELOG.md, section [Non publié].' > dist/notes.md
+                || { echo 'Pré-version $version : ce qui est dans dev au moment du tag (section [Non publié] du CHANGELOG).'
+                     echo
+                     cargo xtask changelog extract 'Non publié'; } > dist/notes.md
             "
 
       - uses: actions/upload-artifact@v7
